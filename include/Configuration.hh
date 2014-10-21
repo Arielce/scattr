@@ -10,10 +10,14 @@
 
 namespace po = boost::program_options;
 
+class AdaptersFactory;
+
 class Configuration : public po::variables_map
 {
 protected:
-  po::variables_map   vm_;
+  int     argc_;
+  char**  argv_;
+  char**  env_;
 public:
   class Error : public std::runtime_error {
   public:
@@ -32,7 +36,9 @@ public:
     virtual const char* what() const throw ();
   };
 
-  Configuration(int, char**, char**);
+  Configuration(int, char**, char**, const AdaptersFactory &);
+  void getDesc(po::options_description &);
+  void getFromAdapters(const AdaptersFactory &);
 };
 
 #endif

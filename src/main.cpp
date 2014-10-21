@@ -6,10 +6,10 @@ int main(int ac, char** av, char** env)
 {
   try
   {
-    Configuration conf(ac, av, env);
-    AdaptersFactory adapters(conf);
+    AdaptersFactory adapters;
+    Configuration conf(ac, av, env, adapters);
 
-    adapters.run();
+    adapters.run(conf);
   }
   catch (Configuration::Error & e)
   {

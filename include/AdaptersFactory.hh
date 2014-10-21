@@ -3,17 +3,20 @@
 
 # include <map>
 # include <memory>
-# include "Configuration.hh"
 # include "BaseAdapter.hh"
+
+class Configuration;
 
 class AdaptersFactory
 {
-private:
-  std::reference_wrapper<const Configuration> configuration_;
-  std::map<std::string, std::shared_ptr<Adapters::BaseAdapter>> adapters_;
 public:
-  AdaptersFactory(const Configuration &);
-  void run();
+  typedef std::map<std::string, std::shared_ptr<Adapters::BaseAdapter>> AdaptersContainer;
+private:
+  AdaptersContainer adapters_;
+public:
+  AdaptersFactory();
+  void run(const Configuration &);
+  const AdaptersFactory::AdaptersContainer & getAdapters() const;
 };
 
 #endif

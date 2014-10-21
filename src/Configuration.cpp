@@ -1,15 +1,15 @@
 #include <fstream>
 #include "Configuration.hh"
+#include "AdaptersFactory.hh"
 
-Configuration::Configuration(int argc, char** argv, char** env)
-  : po::variables_map()
+Configuration::Configuration(int argc, char** argv, char** env, const AdaptersFactory & adapters)
+  : po::variables_map(), argc_(argc), argv_(argv), env_(env)
 {
-  (void)env;
   try
   {
     namespace po = boost::program_options;
 
-    po::options_description desc("Options");
+    po::options_description desc("common");
     desc.add_options()
     ("help", "Print usage")
     ("source,s", po::value<std::string>()->default_value(AMQP_DEFAULT_HOST), "Set the AMQP host source")
@@ -17,30 +17,9 @@ Configuration::Configuration(int argc, char** argv, char** env)
     ("log,o", po::value<std::string>()->default_value(DEFAULT_LOG_PATH), "Set the log file")
     ("config,c", po::value<std::string>()->default_value(DEFAULT_CONFIG_PATH), "Set the config file path");
 
-    try
-    {
-      po::store(po::parse_command_line(argc, argv, desc), *this);
-    }
-    catch(po::error& e)
-    {
-      throw Configuration::Error(Configuration::Error::PARSING_CMD, e.what());
-    }
-    try
-    {
-      std::string filename(DEFAULT_CONFIG_PATH);
+    this->getDesc(desc);
+    this->getFromAdapters(adapters);
 
-      if (this->count("config"))
-        filename = this->operator[]("config").as<std::string>();
-
-      std::ifstream file(filename);
-      if (!file.is_open() && filename != DEFAULT_CONFIG_PATH)
-        throw Configuration::Error(Configuration::Error::OPENING_FILE, filename);
-      po::store(po::parse_config_file(file, desc), *this);
-    }
-    catch (po::error& e)
-    {
-      throw Configuration::Error(Configuration::Error::PARSING_FILE, e.what());
-    }
     po::notify(*this);
   }
   catch(Configuration::Error & e)
@@ -50,6 +29,46 @@ Configuration::Configuration(int argc, char** argv, char** env)
   catch(std::exception & e)
   {
     throw Configuration::Error(Configuration::Error::UNKNOWN, e.what());
+  }
+}
+
+void
+Configuration::getDesc(po::options_description & desc)
+{
+  try
+  {
+    po::store(po::parse_command_line(argc_, argv_, desc), *this);
+  }
+  catch(po::error& e)
+  {
+    throw Configuration::Error(Configuration::Error::PARSING_CMD, e.what());
+  }
+  try
+  {
+    std::string filename(DEFAULT_CONFIG_PATH);
+
+    if (this->count("config"))
+      filename = this->operator[]("config").as<std::string>();
+
+    std::ifstream file(filename);
+    if (!file.is_open() && filename != DEFAULT_CONFIG_PATH)
+      throw Configuration::Error(Configuration::Error::OPENING_FILE, filename);
+    po::store(po::parse_config_file(file, desc), *this);
+  }
+  catch (po::error& e)
+  {
+    throw Configuration::Error(Configuration::Error::PARSING_FILE, e.what());
+  }
+}
+
+void
+Configuration::getFromAdapters(const AdaptersFactory & adapters)
+{
+  for (auto & adapter : adapters.getAdapters())
+  {
+    po::options_description desc(adapter.second->getName());
+    adapter.second->addConfiguration(desc);
+    this->getDesc(desc);
   }
 }
 
