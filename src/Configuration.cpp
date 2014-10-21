@@ -43,6 +43,10 @@ Configuration::Configuration(int argc, char** argv, char** env)
     }
     po::notify(*this);
   }
+  catch(Configuration::Error & e)
+  {
+    throw e;
+  }
   catch(std::exception & e)
   {
     throw Configuration::Error(Configuration::Error::UNKNOWN, e.what());
@@ -73,7 +77,7 @@ Configuration::Error::what() const throw ()
       result = "Error while parsing configuration file";
     break;
     case OPENING_FILE:
-      result = "Error when opening file";
+      result = "Error when opening configuration file";
     break;
     default:
       result = "Unknown error while getting configuration";
