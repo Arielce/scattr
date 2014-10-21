@@ -56,7 +56,6 @@ Configuration::Configuration(int argc, char** argv, char** env)
 /*
  * Configuration::Error
  */
-
 Configuration::Error::Error(Configuration::Error::error_type type, const std::string & error)
   : std::runtime_error(error), type_(type), error_(error)
 {

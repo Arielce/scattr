@@ -11,11 +11,11 @@ EXEC = notifier
 
 CXX = g++
 
-CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I./include -c -std=c++11 -O2
+CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2
 
 LDFLAGS = -lboost_program_options
 
-SRCS := $(wildcard src/*.cpp)
+SRCS := $(wildcard src/*.cpp adapters/*/*.cpp)
 SRCDIRS := $(shell find . -name '*.cpp' -exec dirname {} \; | uniq)
 
 OBJDIR = .dobjects
