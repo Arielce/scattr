@@ -33,7 +33,7 @@ Configuration::Configuration(int argc, char** argv, char** env)
         filename = this->operator[]("config").as<std::string>();
 
       std::ifstream file(filename);
-      if (!file.is_open() && this->count("config"))
+      if (!file.is_open() && filename != DEFAULT_CONFIG_PATH)
         throw Configuration::Error(Configuration::Error::OPENING_FILE, filename);
       po::store(po::parse_config_file(file, desc), *this);
     }
