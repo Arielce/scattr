@@ -1,0 +1,84 @@
+#include <fstream>
+#include "Configuration.hh"
+
+Configuration::Configuration(int argc, char** argv, char** env)
+  : po::variables_map()
+{
+  (void)env;
+  try
+  {
+    namespace po = boost::program_options;
+
+    po::options_description desc("Options");
+    desc.add_options()
+    ("help", "Print usage")
+    ("source,s", po::value<std::string>()->default_value(AMQP_DEFAULT_HOST), "Set the AMQP host source")
+    ("port,p", po::value<int>()->default_value(AMQP_DEFAULT_PORT), "Set the AMQP port")
+    ("log,o", po::value<std::string>()->default_value(DEFAULT_LOG_PATH), "Set the log file")
+    ("config,c", po::value<std::string>()->default_value(DEFAULT_CONFIG_PATH), "Set the config file path");
+
+    try
+    {
+      po::store(po::parse_command_line(argc, argv, desc), *this);
+    }
+    catch(po::error& e)
+    {
+      throw Configuration::Error(Configuration::Error::PARSING_CMD, e.what());
+    }
+    try
+    {
+      std::string filename(DEFAULT_CONFIG_PATH);
+
+      if (this->count("config"))
+        filename = this->operator[]("config").as<std::string>();
+
+      std::ifstream file(filename);
+      if (!file.is_open() && this->count("config"))
+        throw Configuration::Error(Configuration::Error::OPENING_FILE, filename);
+      po::store(po::parse_config_file(file, desc), *this);
+    }
+    catch (po::error& e)
+    {
+      throw Configuration::Error(Configuration::Error::PARSING_FILE, e.what());
+    }
+    po::notify(*this);
+  }
+  catch(std::exception & e)
+  {
+    throw Configuration::Error(Configuration::Error::UNKNOWN, e.what());
+  }
+}
+
+/*
+ * Configuration::Error
+ */
+
+Configuration::Error::Error(Configuration::Error::error_type type, const std::string & error)
+  : std::runtime_error(error), type_(type), error_(error)
+{
+}
+
+const char*
+Configuration::Error::what() const throw ()
+{
+  std::string result;
+
+  result = "";
+  switch (type_)
+  {
+    case PARSING_CMD:
+      result = "Error while parsing command line arguments";
+    break;
+    case PARSING_FILE:
+      result = "Error while parsing configuration file";
+    break;
+    case OPENING_FILE:
+      result = "Error when opening file";
+    break;
+    default:
+      result = "Unknown error while getting configuration";
+    break;
+  }
+  result += ": " + error_;
+  return result.c_str();
+}
