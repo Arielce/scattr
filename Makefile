@@ -13,7 +13,7 @@ CXX = g++
 
 CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I./include -c -std=c++11 -O2
 
-#LDFLAGS =
+LDFLAGS = -lboost_program_options
 
 SRCS := $(wildcard src/*.cpp)
 SRCDIRS := $(shell find . -name '*.cpp' -exec dirname {} \; | uniq)
