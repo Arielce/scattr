@@ -14,7 +14,8 @@ AdaptersFactory::AdaptersFactory(const Configuration & conf)
   : configuration_(conf)
 {
   boost::assign::insert(adapters_)
-  ("test", std::shared_ptr<Adapters::AndroidAdapter>(new Adapters::AndroidAdapter));
+  ("android", std::shared_ptr<Adapters::AndroidAdapter>(new Adapters::AndroidAdapter));
+  // Add your adapters here
 }
 
 void
