@@ -8,4 +8,6 @@ Project is currently under development.
 Requirements
 ============
 
-  - Boost (program_options)
+  - C++ 11
+  - Boost (program_options, assign)
+  - CPPUnit (unit testing library)
