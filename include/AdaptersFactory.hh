@@ -7,16 +7,27 @@
 
 class Configuration;
 
+/*!
+ * Handle all adapters
+ */
 class AdaptersFactory
 {
 public:
   typedef std::map<std::string, std::shared_ptr<Adapters::BaseAdapter>> AdaptersContainer;
 private:
+  /*!
+   * A map containing the adapters
+   */
   AdaptersContainer adapters_;
 public:
+  /*!
+   * Creates a new AdaptersFactory and initializes adapters
+   */
   AdaptersFactory();
-  void run(const Configuration &);
-  const AdaptersFactory::AdaptersContainer & getAdapters() const;
+  /*!
+   * Get adapters_
+   */
+  const AdaptersContainer & getAdapters() const;
 };
 
 #endif

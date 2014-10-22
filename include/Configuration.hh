@@ -12,14 +12,20 @@ namespace po = boost::program_options;
 
 class AdaptersFactory;
 
+/*!
+ * Configure the program, parse the command line options...
+ */
 class Configuration : public po::variables_map
 {
 protected:
-  int     argc_;
-  char**  argv_;
-  char**  env_;
-  po::options_description desc_;
+  int     argc_; //!< Number of command line arguments
+  char**  argv_; //!< Command line arguments
+  char**  env_; //!< Environment variables
+  po::options_description desc_; //!< Accepted arguments
 public:
+  /*!
+   * Exception class specific to configuration errors
+   */
   class Error : public std::runtime_error {
   public:
     enum error_type {
@@ -37,10 +43,24 @@ public:
     virtual const char* what() const throw ();
   };
 
-  Configuration(int, char**, char**, const AdaptersFactory &);
+protected:
+  /*!
+   * Parse command line arguments using a specific description
+   */
   void getDesc(po::options_description &);
+  /*!
+   * Get the description from the adapters
+   */
   void getFromAdapters(po::options_description &, const AdaptersFactory &);
+public:
+  /*!
+   * Initialize configuration
+   */
+  Configuration(int, char**, char**, const AdaptersFactory &);
 
+  /*!
+   * Sends the usage to a stream
+   */
   friend std::ostream & operator<<(std::ostream &, const Configuration &);
 };
 

@@ -17,12 +17,6 @@ AdaptersFactory::AdaptersFactory()
   // Add your adapters here
 }
 
-void
-AdaptersFactory::run(const Configuration & conf)
-{
-  (void)conf;
-}
-
 const AdaptersFactory::AdaptersContainer &
 AdaptersFactory::getAdapters() const
 {

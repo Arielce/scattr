@@ -13,7 +13,6 @@ int main(int ac, char** av, char** env)
       std::cout << conf << std::endl;
       return EXIT_SUCCESS;
     }
-    adapters.run(conf);
   }
   catch (Configuration::Error & e)
   {
