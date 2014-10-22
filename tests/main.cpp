@@ -10,7 +10,7 @@
 #include <fstream>
 
 
-int 
+int
 main( int argc, char* argv[] )
 {
   // Retreive test path from command line first argument. Default to "" which resolve
@@ -22,29 +22,25 @@ main( int argc, char* argv[] )
 
   // Add a listener that colllects test result
   CPPUNIT_NS::TestResultCollector result;
-  controller.addListener( &result );        
+  controller.addListener(&result);
 
   // Add a listener that print dots as test run.
-#ifdef WIN32
-  CPPUNIT_NS::TextTestProgressListener progress;
-#else
   CPPUNIT_NS::BriefTestProgressListener progress;
-#endif
-  controller.addListener( &progress );      
+  controller.addListener(&progress);
 
   // Add the top suite to the test runner
   CPPUNIT_NS::TestRunner runner;
-  runner.addTest( CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest() );   
+  runner.addTest( CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest() );
   try
     {
-      CPPUNIT_NS::stdCOut() << "Running "  <<  testPath;
-      runner.run( controller, testPath );
+      CPPUNIT_NS::stdCOut() << "Running " << testPath;
+      runner.run(controller, testPath);
 
       CPPUNIT_NS::stdCOut() << "\n";
 
       // Print test in a compiler compatible format.
-      CPPUNIT_NS::CompilerOutputter outputter( &result, CPPUNIT_NS::stdCOut() );
-      outputter.write(); 
+      CPPUNIT_NS::CompilerOutputter outputter(&result, CPPUNIT_NS::stdCOut());
+      outputter.write();
 
       // Uncomment this for XML output
       //    std::ofstream file( "tests.xml" );
@@ -53,12 +49,12 @@ main( int argc, char* argv[] )
       //    xml.write();
       //    file.close();
     }
-  catch ( std::invalid_argument &e )  // Test path not resolved
+  catch (std::invalid_argument &e)  // Test path not resolved
     {
-      CPPUNIT_NS::stdCOut()  <<  "\n"  
-			     <<  "ERROR: "  <<  e.what()
+      CPPUNIT_NS::stdCOut() << "\n"
+			     << "ERROR: " << e.what()
 			     << "\n";
       return 0;
     }
-  return result.wasSuccessful() ? 0 : 1;
+  return result.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
