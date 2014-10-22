@@ -28,6 +28,8 @@ public:
    * Get adapters_
    */
   const AdaptersContainer & getAdapters() const;
+  std::shared_ptr<Adapters::BaseAdapter> operator[](const std::string &);
+
 };
 
 #endif

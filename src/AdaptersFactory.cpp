@@ -13,7 +13,7 @@
 AdaptersFactory::AdaptersFactory()
 {
   boost::assign::insert(adapters_)
-  ("android", std::shared_ptr<Adapters::AndroidAdapter>(new Adapters::AndroidAdapter));
+  ("Android", std::shared_ptr<Adapters::AndroidAdapter>(new Adapters::AndroidAdapter));
   // Add your adapters here
 }
 
@@ -21,4 +21,10 @@ const AdaptersFactory::AdaptersContainer &
 AdaptersFactory::getAdapters() const
 {
   return adapters_;
+}
+
+std::shared_ptr<Adapters::BaseAdapter>
+AdaptersFactory::operator[](const std::string & key)
+{
+  return adapters_[key];
 }
