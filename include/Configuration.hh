@@ -18,6 +18,7 @@ protected:
   int     argc_;
   char**  argv_;
   char**  env_;
+  po::options_description desc_;
 public:
   class Error : public std::runtime_error {
   public:
@@ -38,7 +39,9 @@ public:
 
   Configuration(int, char**, char**, const AdaptersFactory &);
   void getDesc(po::options_description &);
-  void getFromAdapters(const AdaptersFactory &);
+  void getFromAdapters(po::options_description &, const AdaptersFactory &);
+
+  friend std::ostream & operator<<(std::ostream &, const Configuration &);
 };
 
 #endif

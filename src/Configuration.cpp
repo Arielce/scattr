@@ -3,22 +3,21 @@
 #include "AdaptersFactory.hh"
 
 Configuration::Configuration(int argc, char** argv, char** env, const AdaptersFactory & adapters)
-  : po::variables_map(), argc_(argc), argv_(argv), env_(env)
+  : po::variables_map(), argc_(argc), argv_(argv), env_(env), desc_("Common")
 {
   try
   {
     namespace po = boost::program_options;
 
-    po::options_description desc("common");
-    desc.add_options()
+    desc_.add_options()
     ("help", "Print usage")
     ("source,s", po::value<std::string>()->default_value(AMQP_DEFAULT_HOST), "Set the AMQP host source")
     ("port,p", po::value<int>()->default_value(AMQP_DEFAULT_PORT), "Set the AMQP port")
     ("log,o", po::value<std::string>()->default_value(DEFAULT_LOG_PATH), "Set the log file")
     ("config,c", po::value<std::string>()->default_value(DEFAULT_CONFIG_PATH), "Set the config file path");
 
-    this->getDesc(desc);
-    this->getFromAdapters(adapters);
+    this->getFromAdapters(desc_, adapters);
+    this->getDesc(desc_);
 
     po::notify(*this);
   }
@@ -62,14 +61,21 @@ Configuration::getDesc(po::options_description & desc)
 }
 
 void
-Configuration::getFromAdapters(const AdaptersFactory & adapters)
+Configuration::getFromAdapters(po::options_description & base, const AdaptersFactory & adapters)
 {
   for (auto & adapter : adapters.getAdapters())
   {
     po::options_description desc(adapter.second->getName());
     adapter.second->addConfiguration(desc);
-    this->getDesc(desc);
+    base.add(desc);
   }
+}
+
+std::ostream &
+operator<<(std::ostream & os, const Configuration & conf)
+{
+  os << conf.desc_;
+  return os;
 }
 
 /*

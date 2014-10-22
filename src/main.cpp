@@ -8,7 +8,11 @@ int main(int ac, char** av, char** env)
   {
     AdaptersFactory adapters;
     Configuration conf(ac, av, env, adapters);
-
+    if (conf.count("help"))
+    {
+      std::cout << conf << std::endl;
+      return EXIT_SUCCESS;
+    }
     adapters.run(conf);
   }
   catch (Configuration::Error & e)
