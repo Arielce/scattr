@@ -42,7 +42,10 @@ test: buildrepo $(OBJS) $(OBJS_TESTS)
 	@echo "Building " $@
 	@echo "$@: Linking objects files... "
 	@$(CXX) -o $@ $(filter-out $(OBJDIR)/src/main.o, $(OBJS)) $(OBJS_TESTS) $(LDFLAGS)
-	@echo "Linking done."
+	@echo "Linking done. Launching tests..."
+	@echo "---------"
+	@./$@
+	@echo "---------"
 
 $(OBJDIR)/%.o: %.cpp
 	@echo "Generating dependencies for $<"
