@@ -8,7 +8,8 @@ namespace Adapters
 {
   class AndroidAdapter : public BaseAdapter
   {
-  std::string getName() const;
+    std::string getName() const;
+    void addConfiguration(po::options_description &);
   };
 };
 

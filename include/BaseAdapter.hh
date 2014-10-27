@@ -4,6 +4,8 @@
 # include <string>
 # include <boost/program_options.hpp>
 
+# define  CONFIG_PATH(file)   "/etc/needbook/notifier/adapters/" file
+
 namespace po = boost::program_options;
 
 namespace Adapters
