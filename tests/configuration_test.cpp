@@ -22,7 +22,6 @@ public:
     for (unsigned long i = 0; i < (sizeof(av) / sizeof(char*)); i++)
     {
       free(av[i]);
-      std::cout << i << std::endl;
     }
     delete conf;
   }
