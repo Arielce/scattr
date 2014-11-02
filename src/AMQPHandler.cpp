@@ -21,6 +21,9 @@ AMQPHandler::onData(AMQP::Connection *connection, const char *data, size_t size)
     //  send all data at once, so you also need to take care of buffering
     //  the bytes that could not immediately be sent, and try to send
     //  them again when the socket becomes writable again
+    (void)connection;
+    (void)data;
+    (void)size;
 }
 
 /**
@@ -35,6 +38,7 @@ AMQPHandler::onConnected(AMQP::Connection *connection)
     // @todo
     //  add your own implementation, for example by creating a channel
     //  instance, and start publishing or consuming
+    (void)connection;
 }
 
 /**
@@ -51,6 +55,8 @@ AMQPHandler::onError(AMQP::Connection *connection, const char *message)
     //  add your own implementation, for example by reporting the error
     //  to the user of your program, log the error, and destruct the
     //  connection object because it is no longer in a usable state
+    (void)connection;
+    (void)message;
 }
 
 /**
@@ -61,4 +67,7 @@ AMQPHandler::onError(AMQP::Connection *connection, const char *message)
  *  @param  connection      The connection that was closed and that is now unusable
  */
 void
-AMQPHandler::onClosed(AMQP::Connection *connection) {}
+AMQPHandler::onClosed(AMQP::Connection *connection) {
+  socket_->close();
+  (void)connection;
+}
