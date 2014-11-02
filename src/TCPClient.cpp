@@ -1,7 +1,7 @@
 #include "TCPClient.hh"
 
 TCPClient::TCPClient(const std::string & server, int port)
-  : socket_(io_service_), buflen_(TCPBUFLEN)
+  : socket_(io_service_), connected_(false), buflen_(TCPBUFLEN)
 {
   std::ostringstream os;
   os << port;
@@ -27,13 +27,15 @@ TCPClient::onConnect(const boost::system::error_code& error_code, tcp::resolver:
 {
   if (error_code == 0)
   {
+    connected_ = true;
     if (this->callback_)
-      this->callback_(TCPClient::CONNECTED, buffer_);
+      this->callback_(TCPClient::CONNECTED, std::string());
     socket_.async_receive(boost::asio::buffer(buffer_.data(), buflen_),
-      boost::bind(&TCPClient::onReceive, this, boost::asio::placeholders::error));
+      boost::bind(&TCPClient::onReceive, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
   }
   else if (end_point_iter != tcp::resolver::iterator())
   {
+    connected_ = false;
     socket_.close();
     tcp::endpoint end_point = *end_point_iter;
 
@@ -43,13 +45,14 @@ TCPClient::onConnect(const boost::system::error_code& error_code, tcp::resolver:
 }
 
 void
-TCPClient::onReceive(const boost::system::error_code& error_code)
+TCPClient::onReceive(const boost::system::error_code& error_code, std::size_t bytes_transferred)
 {
   if (error_code == 0)
   {
-    this->callback_(TCPClient::RECEIVED, buffer_);
+    if (this->callback_)
+      this->callback_(TCPClient::RECEIVED, std::string(buffer_.data(), bytes_transferred));
     socket_.async_receive(boost::asio::buffer(buffer_.data(), buflen_),
-      boost::bind(&TCPClient::onReceive, this, boost::asio::placeholders::error));
+      boost::bind(&TCPClient::onReceive, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
   }
   else
     this->doClose();
@@ -62,8 +65,6 @@ TCPClient::onWrite(const boost::system::error_code& error_code, std::size_t byte
   {
     (void)bytes_transferred;
   }
-  else
-    this->doClose();
 }
 
 void
@@ -93,4 +94,10 @@ TCPClient::run()
 
   thread_ = std::shared_ptr<boost::thread>(new boost::thread(boost::bind(&boost::asio::io_service::run, &io_service_)));
   return thread_;
+}
+
+bool
+TCPClient::good() const
+{
+  return connected_;
 }

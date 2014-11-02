@@ -1,7 +1,7 @@
 #ifndef   __TCP_CLIENT_HH__
 # define  __TCP_CLIENT_HH__
 
-# define  TCPBUFLEN 128
+# define  TCPBUFLEN 1024
 
 # include <iostream>
 # include <stdio.h>
@@ -22,10 +22,11 @@ public:
     CONNECTED,
     RECEIVED
   };
-  typedef std::function<void(TCPClient::action, boost::array<char, TCPBUFLEN> &)> callback_t;
+  typedef std::function<void(TCPClient::action, const std::string &)> callback_t;
 private:
   boost::asio::io_service io_service_;
   tcp::socket socket_;
+  bool connected_;
 
   boost::array<char, TCPBUFLEN> buffer_;
   size_t buflen_;
@@ -37,10 +38,11 @@ public:
   void write(const std::string &);
   void close();
   void onAction(callback_t);
+  bool good() const;
   std::shared_ptr<boost::thread> run();
 private:
   void onConnect(const boost::system::error_code &, tcp::resolver::iterator);
-  void onReceive(const boost::system::error_code &);
+  void onReceive(const boost::system::error_code &, std::size_t);
   void onWrite(const boost::system::error_code &, std::size_t);
   void doClose();
 };
