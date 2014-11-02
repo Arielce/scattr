@@ -20,7 +20,7 @@ public:
     client->run();
   }
 
-  void action(TCPClient::action action, boost::array<char, TCPBUFLEN> & buf)
+  void action(TCPClient::action action, const std::string & buf)
   {
     (void)buf;
     if (action == TCPClient::CONNECTED)
