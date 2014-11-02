@@ -14,7 +14,7 @@ public:
   {
     char *args[4] = { strdup("tests"), strdup("--help"), strdup("-o"), strdup("file") };
     memcpy(av, args, sizeof(av));
-    conf = new Configuration(4, av, NULL, adapters);
+    conf = new Configuration(4, av, nullptr, adapters);
   }
 
   void tearDown()
