@@ -9,8 +9,9 @@ class AMQPHandler : public AMQP::ConnectionHandler
 {
 protected:
   std::shared_ptr<TCPClient> socket_;
+  AMQP::Connection *         connection_;
 private:
-  AMQPHandler(const Configuration &);
+  void action(TCPClient::action, const std::string &);
   /**
    *  Method that is called by the AMQP library every time it has data
    *  available that should be sent to RabbitMQ.
@@ -43,6 +44,8 @@ private:
    *  @param  connection      The connection that was closed and that is now unusable
    */
   void onClosed(AMQP::Connection *);
+public:
+  AMQPHandler(const Configuration &);
 };
 
 #endif
