@@ -13,7 +13,7 @@ CXX = g++
 
 CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2
 
-LDFLAGS = -lboost_program_options -lboost_system -lboost_thread-mt -lcppunit
+LDFLAGS = -lboost_program_options -lboost_system -lboost_thread-mt -lcppunit -lamqpcpp
 
 SRCDIRS := $(shell find . -name '*.cpp' -exec dirname {} \; | uniq)
 OBJDIR = .dobjects
