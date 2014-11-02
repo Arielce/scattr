@@ -65,7 +65,7 @@ Configuration::getDesc(po::options_description & desc)
 void
 Configuration::getFromAdapters(po::options_description & base, const AdaptersFactory & adapters)
 {
-  for (auto & adapter : adapters.getAdapters())
+  for (auto & adapter : adapters)
   {
     po::options_description desc(adapter.second->getName());
     adapter.second->addConfiguration(desc);

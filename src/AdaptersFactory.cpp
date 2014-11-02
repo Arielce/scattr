@@ -28,3 +28,31 @@ AdaptersFactory::operator[](const std::string & key)
 {
   return adapters_[key];
 }
+
+/**
+ * ITERATORS
+ */
+
+AdaptersFactory::iterator
+AdaptersFactory::begin()
+{
+  return adapters_.begin();
+}
+
+AdaptersFactory::const_iterator
+AdaptersFactory::begin() const
+{
+  return adapters_.begin();
+}
+
+AdaptersFactory::iterator
+AdaptersFactory::end()
+{
+  return adapters_.end();
+}
+
+AdaptersFactory::const_iterator
+AdaptersFactory::end() const
+{
+  return adapters_.end();
+}
