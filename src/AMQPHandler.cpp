@@ -17,7 +17,7 @@ AMQPHandler::AMQPHandler(const Configuration & conf)
   socket_ = std::make_shared<TCPClient>(source, port);
   socket_->onAction(std::bind(&AMQPHandler::action, this, std::placeholders::_1, std::placeholders::_2));
   socket_->run();
-  std::cout << "Trying to connect to AMQP " << source << ":" << port << "." << std::endl;
+  std::cout << "Trying to connect to AMQP " << source << ":" << port << "..." << std::endl;
   socket_->wait();
   std::cout << "Connection successful" << std::endl;
 }
