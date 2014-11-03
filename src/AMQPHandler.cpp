@@ -1,5 +1,7 @@
 #include "AMQPHandler.hh"
 
+namespace ph = std::placeholders;
+
 const std::string
 AMQPHandler::EXCHANGE_NAME = "nb_notifier_exch";
 const std::string
@@ -59,6 +61,13 @@ AMQPHandler::onConnected(AMQP::Connection *connection)
           throw std::runtime_error(os.str());
         });
       }
+      channel_->consume(QUEUE_NAME)
+      .onReceived(std::bind(&AMQPHandler::onReceived, this, ph::_1, ph::_2, ph::_3))
+      .onError([](const char *error) {
+        std::ostringstream os;
+        os << "Impossible to start consuming messages on queue " << QUEUE_NAME << ": " << error;
+        throw std::runtime_error(os.str());
+      });
     }).onError([](const char *error) {
       std::ostringstream os;
       os << "Queue could not be declared: " << error;
@@ -82,4 +91,12 @@ void
 AMQPHandler::onClosed(AMQP::Connection *connection) {
   socket_->close();
   (void)connection;
+}
+
+void
+AMQPHandler::onReceived(const AMQP::Message &message, uint64_t deliveryTag, bool redelivered)
+{
+  (void)redelivered;
+  std::cout << "received message " << message.message() << std::endl;
+  channel_->ack(deliveryTag);
 }
