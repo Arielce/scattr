@@ -1,7 +1,9 @@
 #include "AMQPHandler.hh"
 
 const std::string
-AMQPHandler::EXCHANGE_NAME = "nb_notifier";
+AMQPHandler::EXCHANGE_NAME = "nb_notifier_exch";
+const std::string
+AMQPHandler::QUEUE_NAME = "nb_notifier_queue";
 
 AMQPHandler::AMQPHandler(const Configuration & conf)
   : connection_(nullptr), channel_(nullptr)
@@ -45,17 +47,17 @@ AMQPHandler::onConnected(AMQP::Connection *connection)
   channel_ = std::unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
   channel_->declareExchange(EXCHANGE_NAME).onSuccess([&]() {
     std::cout << "Exchange declared successfully" << std::endl;
-    for (auto & adapter : *AdaptersFactory::getInstance())
-    {
-      channel_->declareQueue(adapter.second->getName()).onSuccess([&]() {
-        std::cout << "Queue " << adapter.second->getName() << " declared successfully" << std::endl;
-        channel_->bindQueue(EXCHANGE_NAME, adapter.second->getName(), adapter.second->getName());
-      }).onError([](const char *error) {
-        std::ostringstream os;
-        os << "Queue could not be declared: " << error;
-        throw std::runtime_error(os.str());
-      });
-    }
+    channel_->declareQueue(QUEUE_NAME).onSuccess([&]() {
+      std::cout << "Queue " << QUEUE_NAME << " declared successfully" << std::endl;
+      for (auto & adapter : *AdaptersFactory::getInstance())
+      {
+        channel_->bindQueue(EXCHANGE_NAME, QUEUE_NAME, adapter.second->getName());
+      }
+    }).onError([](const char *error) {
+      std::ostringstream os;
+      os << "Queue could not be declared: " << error;
+      throw std::runtime_error(os.str());
+    });
   }).onError([](const char *error) {
     std::ostringstream os;
     os << "Exchange could not be declared: " << error;

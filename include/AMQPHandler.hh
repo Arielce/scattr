@@ -10,6 +10,7 @@ class AMQPHandler : public AMQP::ConnectionHandler
 {
 private:
   static const std::string EXCHANGE_NAME;
+  static const std::string QUEUE_NAME;
 protected:
   std::shared_ptr<TCPClient> socket_;
   AMQP::Connection *         connection_;
