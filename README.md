@@ -9,6 +9,6 @@ Requirements
 ============
 
   - C++ 11
-  - Boost (program_options, assign)
+  - Boost (program_options, assign, asio, thread)
   - CPPUnit (unit testing library)
   - [https://github.com/CopernicaMarketingSoftware/AMQP-CPP](AMQP-CPP)

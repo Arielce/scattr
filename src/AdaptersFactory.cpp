@@ -5,6 +5,7 @@
  * Include Adapters
  */
 #include "adapters/android/AndroidAdapter.hh"
+#include "adapters/ios/IOSAdapter.hh"
 
 /*
  * AdaptersFactory
@@ -16,7 +17,8 @@ AdaptersFactory::instance_ = nullptr;
 AdaptersFactory::AdaptersFactory()
 {
   boost::assign::insert(adapters_)
-  ("Android", std::shared_ptr<Adapters::AndroidAdapter>(new Adapters::AndroidAdapter));
+    ("Android", std::shared_ptr<Adapters::AndroidAdapter>(new Adapters::AndroidAdapter))
+    ("iOS", std::shared_ptr<Adapters::IOSAdapter>(new Adapters::IOSAdapter));
   // Add your adapters here
 }
 
