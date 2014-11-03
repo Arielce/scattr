@@ -3,13 +3,17 @@
 
 # include <amqpcpp.h>
 # include "Configuration.hh"
+# include "AdaptersFactory.hh"
 # include "TCPClient.hh"
 
 class AMQPHandler : public AMQP::ConnectionHandler
 {
+private:
+  static const std::string EXCHANGE_NAME;
 protected:
   std::shared_ptr<TCPClient> socket_;
   AMQP::Connection *         connection_;
+  std::unique_ptr<AMQP::Channel> channel_;
 private:
   void action(TCPClient::action, const std::string &);
   /**

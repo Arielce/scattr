@@ -1,7 +1,10 @@
 #include "AMQPHandler.hh"
 
+const std::string
+AMQPHandler::EXCHANGE_NAME = "nb_notifier";
+
 AMQPHandler::AMQPHandler(const Configuration & conf)
-  : connection_(nullptr)
+  : connection_(nullptr), channel_(nullptr)
 {
   std::string source = conf["source"].as<std::string>();
   int port = conf["port"].as<int>();
@@ -22,10 +25,9 @@ AMQPHandler::action(TCPClient::action action, const std::string & buf)
   (void)buf;
   if (action == TCPClient::CONNECTED)
     return;
-  if (action == TCPClient::RECEIVED)
+  if (action == TCPClient::RECEIVED && connection_)
   {
-    if (connection_)
-      connection_->parse(buf.data(), buf.size());
+    connection_->parse(buf.data(), buf.size());
   }
 }
 
@@ -39,8 +41,26 @@ AMQPHandler::onData(AMQP::Connection *connection, const char *data, size_t size)
 void
 AMQPHandler::onConnected(AMQP::Connection *connection)
 {
-  (void)connection;
-  std::cout << "Connected" << std::endl;
+  std::cout << "Connected to AMQP (valid credentials)" << std::endl;
+  channel_ = std::unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
+  channel_->declareExchange(EXCHANGE_NAME).onSuccess([&]() {
+    std::cout << "Exchange declared successfully" << std::endl;
+    for (auto & adapter : *AdaptersFactory::getInstance())
+    {
+      channel_->declareQueue(adapter.second->getName()).onSuccess([&]() {
+        std::cout << "Queue " << adapter.second->getName() << " declared successfully" << std::endl;
+        channel_->bindQueue(EXCHANGE_NAME, adapter.second->getName(), adapter.second->getName());
+      }).onError([](const char *error) {
+        std::ostringstream os;
+        os << "Queue could not be declared: " << error;
+        throw std::runtime_error(os.str());
+      });
+    }
+  }).onError([](const char *error) {
+    std::ostringstream os;
+    os << "Exchange could not be declared: " << error;
+    throw std::runtime_error(os.str());
+  });
 }
 
 void

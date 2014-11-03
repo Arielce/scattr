@@ -14,7 +14,7 @@ namespace Adapters
   {
   public:
     /*!
-     * Get the name of the adapter
+     * Get the name of the adapter, will also be the name of the AMQP queue.
      */
     virtual std::string getName() const = 0;
     /*!
