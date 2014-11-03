@@ -26,6 +26,7 @@ private:
    * Creates a new AdaptersFactory and initializes adapters
    */
   AdaptersFactory();
+  template<typename A> void add();
 public:
   /*!
    * Get adapters_

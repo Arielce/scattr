@@ -16,9 +16,8 @@ AdaptersFactory::instance_ = nullptr;
 
 AdaptersFactory::AdaptersFactory()
 {
-  boost::assign::insert(adapters_)
-    ("Android", std::shared_ptr<Adapters::AndroidAdapter>(new Adapters::AndroidAdapter))
-    ("iOS", std::shared_ptr<Adapters::IOSAdapter>(new Adapters::IOSAdapter));
+  add<Adapters::AndroidAdapter>();
+  add<Adapters::IOSAdapter>();
   // Add your adapters here
 }
 
@@ -60,6 +59,14 @@ AdaptersFactory::const_iterator
 AdaptersFactory::end() const
 {
   return adapters_.end();
+}
+
+template<typename A>
+void
+AdaptersFactory::add()
+{
+  std::shared_ptr<Adapters::BaseAdapter> adapter = std::make_shared<A>();
+  adapters_[adapter->getName()] = adapter;
 }
 
 std::unique_ptr<AdaptersFactory>&
