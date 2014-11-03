@@ -49,7 +49,7 @@ AMQPHandler::onConnected(AMQP::Connection *connection)
   channel_ = std::unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
   channel_->declareExchange(EXCHANGE_NAME).onSuccess([&]() {
     std::cout << "Exchange " << EXCHANGE_NAME << " declared successfully" << std::endl;
-    channel_->declareQueue(QUEUE_NAME).onSuccess([&]() {
+    channel_->declareQueue(QUEUE_NAME, AMQP::durable).onSuccess([&]() {
       std::cout << "Queue " << QUEUE_NAME << " declared successfully" << std::endl;
       for (auto & adapter : *AdaptersFactory::getInstance())
       {
