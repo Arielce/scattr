@@ -10,6 +10,9 @@
  * AdaptersFactory
  */
 
+std::unique_ptr<AdaptersFactory>
+AdaptersFactory::instance_ = nullptr;
+
 AdaptersFactory::AdaptersFactory()
 {
   boost::assign::insert(adapters_)
@@ -55,4 +58,12 @@ AdaptersFactory::const_iterator
 AdaptersFactory::end() const
 {
   return adapters_.end();
+}
+
+std::unique_ptr<AdaptersFactory>&
+AdaptersFactory::getInstance()
+{
+  if (!instance_)
+    AdaptersFactory::instance_ = std::unique_ptr<AdaptersFactory>(new AdaptersFactory());
+  return AdaptersFactory::instance_;
 }

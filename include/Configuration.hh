@@ -51,12 +51,12 @@ protected:
   /*!
    * Get the description from the adapters
    */
-  void getFromAdapters(po::options_description &, const AdaptersFactory &);
+  void getFromAdapters(po::options_description &);
 public:
   /*!
    * Initialize configuration
    */
-  Configuration(int, char**, char**, const AdaptersFactory &);
+  Configuration(int, char**, char**);
 
   /*!
    * Sends the usage to a stream

@@ -8,13 +8,12 @@ class ConfigurationTest : public CppUnit::TestFixture {
 public:
   char *av[4];
   Configuration *conf;
-  AdaptersFactory adapters;
 
   void setUp()
   {
     char *args[4] = { strdup("tests"), strdup("--help"), strdup("-o"), strdup("file") };
     memcpy(av, args, sizeof(av));
-    conf = new Configuration(4, av, nullptr, adapters);
+    conf = new Configuration(4, av, nullptr);
   }
 
   void tearDown()

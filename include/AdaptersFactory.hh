@@ -21,11 +21,12 @@ private:
    * A map containing the adapters
    */
   AdaptersContainer adapters_;
-public:
+  static std::unique_ptr<AdaptersFactory> instance_;
   /*!
    * Creates a new AdaptersFactory and initializes adapters
    */
   AdaptersFactory();
+public:
   /*!
    * Get adapters_
    */
@@ -35,7 +36,10 @@ public:
   iterator end();
   const_iterator begin() const;
   const_iterator end() const;
-
+  /*!
+   * Get the unique instance of the Factory
+   */
+  static std::unique_ptr<AdaptersFactory>& getInstance();
 };
 
 #endif

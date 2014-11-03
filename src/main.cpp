@@ -8,8 +8,7 @@ int main(int ac, char** av, char** env)
 {
   try
   {
-    AdaptersFactory adapters;
-    Configuration conf(ac, av, env, adapters);
+    Configuration conf(ac, av, env);
     if (conf.count("help"))
     {
       std::cout << conf << std::endl;

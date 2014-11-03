@@ -2,7 +2,7 @@
 #include "Configuration.hh"
 #include "AdaptersFactory.hh"
 
-Configuration::Configuration(int argc, char** argv, char** env, const AdaptersFactory & adapters)
+Configuration::Configuration(int argc, char** argv, char** env)
   : po::variables_map(), argc_(argc), argv_(argv), env_(env), desc_("Common")
 {
   try
@@ -18,7 +18,7 @@ Configuration::Configuration(int argc, char** argv, char** env, const AdaptersFa
     ("log,o", po::value<std::string>()->default_value(DEFAULT_LOG_PATH), "Set the log file")
     ("config,c", po::value<std::string>()->default_value(DEFAULT_CONFIG_PATH), "Set the config file path");
 
-    this->getFromAdapters(desc_, adapters);
+    this->getFromAdapters(desc_);
     this->getDesc(desc_);
 
     po::notify(*this);
@@ -63,9 +63,9 @@ Configuration::getDesc(po::options_description & desc)
 }
 
 void
-Configuration::getFromAdapters(po::options_description & base, const AdaptersFactory & adapters)
+Configuration::getFromAdapters(po::options_description & base)
 {
-  for (auto & adapter : adapters)
+  for (auto & adapter : *AdaptersFactory::getInstance())
   {
     po::options_description desc(adapter.second->getName());
     adapter.second->addConfiguration(desc);
