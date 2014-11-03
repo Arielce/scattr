@@ -30,8 +30,13 @@ private:
 
   boost::array<char, TCPBUFLEN> buffer_;
   size_t buflen_;
+
+  std::string server_;
+  int port_;
   std::shared_ptr<boost::thread> thread_;
   callback_t callback_;
+  boost::mutex mutex_;
+  boost::condition_variable condition_;
 public:
   TCPClient(const std::string &, int);
 
@@ -39,12 +44,14 @@ public:
   void close();
   void onAction(callback_t);
   bool good() const;
+  void wait();
   std::shared_ptr<boost::thread> run();
 private:
   void onConnect(const boost::system::error_code &, tcp::resolver::iterator);
   void onReceive(const boost::system::error_code &, std::size_t);
   void onWrite(const boost::system::error_code &, std::size_t);
   void doClose();
+  void connect();
 };
 
 #endif

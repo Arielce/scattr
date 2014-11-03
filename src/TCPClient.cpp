@@ -1,19 +1,9 @@
 #include "TCPClient.hh"
 
 TCPClient::TCPClient(const std::string & server, int port)
-  : socket_(io_service_), connected_(false), buflen_(TCPBUFLEN)
+  : socket_(io_service_), connected_(false), buflen_(TCPBUFLEN), server_(server), port_(port)
 {
-  std::ostringstream os;
-  os << port;
-
-  tcp::resolver resolver(io_service_);
-  tcp::resolver::query query(server, os.str());
-
-  tcp::resolver::iterator end_point_iter = resolver.resolve(query);
-  tcp::endpoint end_point = *end_point_iter;
-
-  socket_.async_connect(end_point,
-    boost::bind(&TCPClient::onConnect, this, boost::asio::placeholders::error, ++end_point_iter));
+  this->connect();
 }
 
 void
@@ -28,20 +18,39 @@ TCPClient::onConnect(const boost::system::error_code& error_code, tcp::resolver:
   if (error_code == 0)
   {
     connected_ = true;
+    condition_.notify_one();
     if (this->callback_)
       this->callback_(TCPClient::CONNECTED, std::string());
     socket_.async_receive(boost::asio::buffer(buffer_.data(), buflen_),
       boost::bind(&TCPClient::onReceive, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+    return;
   }
-  else if (end_point_iter != tcp::resolver::iterator())
+  if (end_point_iter != tcp::resolver::iterator())
   {
-    connected_ = false;
     socket_.close();
-    tcp::endpoint end_point = *end_point_iter;
-
-    socket_.async_connect(end_point,
+    connected_ = false;
+    socket_.async_connect(*end_point_iter,
       boost::bind(&TCPClient::onConnect, this, boost::asio::placeholders::error, ++end_point_iter));
+    return;
   }
+  boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+  this->connect();
+}
+
+void
+TCPClient::connect()
+{
+  std::ostringstream os;
+
+  os << port_;
+  this->close();
+  connected_ = false;
+  tcp::resolver resolver(io_service_);
+  tcp::resolver::query query(server_, os.str());
+  tcp::resolver::iterator end_point_iter = resolver.resolve(query);
+
+  socket_.async_connect(*end_point_iter,
+    boost::bind(&TCPClient::onConnect, this, boost::asio::placeholders::error, ++end_point_iter));
 }
 
 void
@@ -55,7 +64,10 @@ TCPClient::onReceive(const boost::system::error_code& error_code, std::size_t by
       boost::bind(&TCPClient::onReceive, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
   }
   else
-    this->doClose();
+  {
+    this->close();
+    this->connect();
+  }
 }
 
 void
@@ -100,4 +112,12 @@ bool
 TCPClient::good() const
 {
   return connected_;
+}
+
+void
+TCPClient::wait()
+{
+  boost::unique_lock<boost::mutex> lock(mutex_);
+  while (!this->good())
+    condition_.wait(lock);
 }

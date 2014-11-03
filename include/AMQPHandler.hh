@@ -11,9 +11,10 @@ class AMQPHandler : public AMQP::ConnectionHandler
 private:
   static const std::string EXCHANGE_NAME;
   static const std::string QUEUE_NAME;
+  static const int QUALITY_OF_SERVICE;
 protected:
   std::shared_ptr<TCPClient> socket_;
-  AMQP::Connection *         connection_;
+  std::shared_ptr<AMQP::Connection> connection_;
   std::unique_ptr<AMQP::Channel> channel_;
 private:
   void action(TCPClient::action, const std::string &);

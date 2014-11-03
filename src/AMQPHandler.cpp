@@ -6,21 +6,20 @@ const std::string
 AMQPHandler::EXCHANGE_NAME = "nb_notifier_exch";
 const std::string
 AMQPHandler::QUEUE_NAME = "nb_notifier_queue";
+const int
+AMQPHandler::QUALITY_OF_SERVICE = 5;
 
 AMQPHandler::AMQPHandler(const Configuration & conf)
   : connection_(nullptr), channel_(nullptr)
 {
   std::string source = conf["source"].as<std::string>();
   int port = conf["port"].as<int>();
-  socket_ = std::shared_ptr<TCPClient>(new TCPClient(source, port));
+  socket_ = std::make_shared<TCPClient>(source, port);
   socket_->onAction(std::bind(&AMQPHandler::action, this, std::placeholders::_1, std::placeholders::_2));
   socket_->run();
-  std::cout << "AMQP " << source << ":" << port << "." << std::endl;
-  while (!socket_->good())
-  {
-    std::cout << "Trying to connect to AMQP." << std::endl;
-    boost::this_thread::sleep(boost::posix_time::milliseconds(500));
-  }
+  std::cout << "Trying to connect to AMQP " << source << ":" << port << "." << std::endl;
+  socket_->wait();
+  std::cout << "Connection successful" << std::endl;
 }
 
 void
@@ -28,8 +27,12 @@ AMQPHandler::action(TCPClient::action action, const std::string & buf)
 {
   (void)buf;
   if (action == TCPClient::CONNECTED)
-    return;
-  if (action == TCPClient::RECEIVED && connection_)
+  {
+    if (connection_) // close former connection
+      connection_->close();
+    connection_ = std::make_shared<AMQP::Connection>(this, AMQP::Login("guest","guest"), "/");
+  }
+  else if (action == TCPClient::RECEIVED && connection_)
   {
     connection_->parse(buf.data(), buf.size());
   }
@@ -38,7 +41,7 @@ AMQPHandler::action(TCPClient::action action, const std::string & buf)
 void
 AMQPHandler::onData(AMQP::Connection *connection, const char *data, size_t size)
 {
-  connection_ = connection;
+  (void)connection;
   socket_->write(std::string(data, size));
 }
 
@@ -47,6 +50,7 @@ AMQPHandler::onConnected(AMQP::Connection *connection)
 {
   std::cout << "Connected to AMQP (valid credentials)" << std::endl;
   channel_ = std::unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
+  channel_->setQos(QUALITY_OF_SERVICE);
   channel_->declareExchange(EXCHANGE_NAME).onSuccess([&]() {
     std::cout << "Exchange " << EXCHANGE_NAME << " declared successfully" << std::endl;
     channel_->declareQueue(QUEUE_NAME, AMQP::durable).onSuccess([&]() {
