@@ -16,6 +16,28 @@ Progress
 The architecture has been set up, and the project is almost usable right now if you feel like developing the adapters.
 I still have to develop some extra classes that will help during the development of those, but it shouldn't take too long.
 
+Help
+====
+
+Add you own adapter
+-------------------
+
+Just create your own adapter under the adapters directory. You **must** have a class inheriting from the `Adapters::BaseAdapter` abstract class.
+
+When you're done, in order for notifier to use it, you must add it in the `AdaptersFactory` class. To do so, open `src/AdaptersFactory.cpp`, `#include` your header file,
+and in the `AdaptersFactory::AdaptersFactory` constructor function, add you adapter this way:
+
+```cpp
+AdaptersFactory::AdaptersFactory()
+{
+  //...
+  add<Adapters::AndroidAdapter>();
+  //...
+}
+```
+
+I recommend to take a look at the already existing adapters as an example, though a precise documentation will be available when this will be stable.
+
 Contribute
 ==========
 
