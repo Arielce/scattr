@@ -60,27 +60,19 @@ AMQPHandler::onConnected(AMQP::Connection *connection)
         channel_->bindQueue(EXCHANGE_NAME, QUEUE_NAME, adapter.second->getName()).onSuccess([&]() {
           std::cout << "Queue " << QUEUE_NAME << " binded successfully with routing key " << adapter.second->getName() << std::endl;
         }).onError([](const char *error) {
-          std::ostringstream os;
-          os << "Queue could not be binded: " << error;
-          throw std::runtime_error(os.str());
+          throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_BIND, error);
         });
       }
       channel_->consume(QUEUE_NAME)
       .onReceived(std::bind(&AMQPHandler::onReceived, this, ph::_1, ph::_2, ph::_3))
       .onError([](const char *error) {
-        std::ostringstream os;
-        os << "Impossible to start consuming messages on queue " << QUEUE_NAME << ": " << error;
-        throw std::runtime_error(os.str());
+        throw AMQPHandler::Error(AMQPHandler::Error::CONSUMING_START, error);
       });
     }).onError([](const char *error) {
-      std::ostringstream os;
-      os << "Queue could not be declared: " << error;
-      throw std::runtime_error(os.str());
+      throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_DECL, error);
     });
   }).onError([](const char *error) {
-    std::ostringstream os;
-    os << "Exchange could not be declared: " << error;
-    throw std::runtime_error(os.str());
+    throw AMQPHandler::Error(AMQPHandler::Error::EXCHANGE_DECL, error);
   });
 }
 
@@ -103,4 +95,40 @@ AMQPHandler::onReceived(const AMQP::Message &message, uint64_t deliveryTag, bool
   (void)redelivered;
   std::cout << "received message " << message.message() << std::endl;
   channel_->ack(deliveryTag);
+}
+
+/*
+ * Configuration::Error
+ */
+AMQPHandler::Error::Error(AMQPHandler::Error::error_type type, const std::string & error)
+  : std::runtime_error(error), type_(type), error_(error)
+{
+}
+
+const char*
+AMQPHandler::Error::what() const throw ()
+{
+  std::string result;
+
+  result = "";
+  switch (type_)
+  {
+    case EXCHANGE_DECL:
+      result = "Exchange could not be declared";
+    break;
+    case QUEUE_DECL:
+      result = "Queue could not be declared";
+    break;
+    case QUEUE_BIND:
+      result = "Queue could not be binded";
+    break;
+    case CONSUMING_START:
+      result = "Impossible to start consuming messages";
+    break;
+    default:
+      result = "Unknown error while trying to setup AMQP connection";
+    break;
+  }
+  result += ": " + error_;
+  return result.c_str();
 }
