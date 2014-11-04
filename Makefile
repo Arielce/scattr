@@ -15,6 +15,8 @@ CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2
 
 LDFLAGS = -lboost_program_options -lboost_system -lboost_thread-mt -lcppunit -lamqpcpp
 
+BIN_DIR = bin
+
 SRCDIRS := $(shell find . -name '*.cpp' -exec dirname {} \; | uniq)
 OBJDIR = .dobjects
 
@@ -34,17 +36,19 @@ $(EXEC): buildrepo $(OBJS)
 	@echo "Building" $@
 	@echo "Creating saves directory"
 	@mkdir -p $(SAVES)
+	@mkdir -p $(BIN_DIR)
 	@echo "$@: Linking objects files... "
-	@$(CXX) -o $@ $(OBJS) $(LDFLAGS)
+	@$(CXX) -o $(BIN_DIR)/$@ $(OBJS) $(LDFLAGS)
 	@echo "Linking done."
 
 test: buildrepo $(OBJS) $(OBJS_TESTS)
 	@echo "Building " $@
+	@mkdir -p $(BIN_DIR)
 	@echo "$@: Linking objects files... "
-	@$(CXX) -o $@ $(filter-out $(OBJDIR)/src/main.o, $(OBJS)) $(OBJS_TESTS) $(LDFLAGS)
+	@$(CXX) -o $(BIN_DIR)/$@ $(filter-out $(OBJDIR)/src/main.o, $(OBJS)) $(OBJS_TESTS) $(LDFLAGS)
 	@echo "Linking done. Launching tests..."
 	@echo "---------"
-	@./$@
+	@$(BIN_DIR)/$@
 	@echo "---------"
 
 $(OBJDIR)/%.o: %.cpp

@@ -32,6 +32,5 @@
 
 # Notifier specific
 .dobjects
-notifier
 doc
-test
+bin
