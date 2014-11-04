@@ -1,9 +1,14 @@
 Notifier
 ========
 
-A simple C++ notifier which allows you to send notifications to different devices.
+Notifier is the perfect program to send notifications to different devices in a scalable and distributed way!  
+If you're already using a message broker (AMQP, such as RabbitMQ) or want to use one, then install notifier and let it do the job for you!
 
-Project is currently under development.
+Developed in C++, the project should be capable to handle a crazy number of notifications, and if it is still not enough for you,
+just lauch another instance of the program on a different server!
+
+**This project is currently under development**, and even though it is already a good codebase if you feel like developing your own adapter,
+it is still not usable right away. Wait for us to make the main adapters, such as *Android Cloud Messaging* and *Apple push notification*.
 
 Progress
 ========
@@ -11,7 +16,12 @@ Progress
 The architecture has been set up, and the project is almost usable right now if you feel like developing the adapters.
 I still have to develop some extra classes that will help during the development of those, but it shouldn't take too long.
 
-Feel free to participate on the project!
+Contribute
+==========
+
+This project is maintained by the Needbook team, but every contribution is welcome, just for the project and send pull requests!
+
+If you develop your own adapter and you think it can be useful to other people, you are encourage to send a pull request with it.
 
 Requirements
 ============
