@@ -1,7 +1,7 @@
 #ifndef   __TCP_CLIENT_HH__
 # define  __TCP_CLIENT_HH__
 
-# define  TCPBUFLEN 1024
+# define  TCPBUFLEN 4096
 
 # include <iostream>
 # include <stdio.h>

@@ -9,7 +9,7 @@ AMQPHandler::EXCHANGE_NAME = "nb_notifier_exch";
 const std::string
 AMQPHandler::QUEUE_NAME = "nb_notifier_queue";
 const int
-AMQPHandler::QUALITY_OF_SERVICE = 5;
+AMQPHandler::QUALITY_OF_SERVICE = 10;
 
 AMQPHandler::AMQPHandler(const Configuration & conf)
   : connection_(nullptr), channel_(nullptr)

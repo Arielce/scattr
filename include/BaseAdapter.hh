@@ -7,7 +7,7 @@
 # include <queue>
 
 # define  CONFIG_PATH(file)   "/etc/needbook/notifier/adapters/" file
-# define  MAX_ELEMS_IN_QUEUE  5
+# define  MAX_ELEMS_IN_QUEUE  3
 
 namespace po = boost::program_options;
 
@@ -31,7 +31,7 @@ namespace Adapters
     };
 
     std::queue<const Message> messages_;
-    std::shared_ptr<boost::thread> thread_;
+    std::list<std::shared_ptr<boost::thread>> threads_;
     boost::mutex                  mutex_;
     boost::condition_variable     condition_;
   public:
