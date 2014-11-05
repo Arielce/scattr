@@ -12,13 +12,14 @@ Adapters::BaseAdapter::addConfiguration(po::options_description & desc)
 }
 
 void
-Adapters::BaseAdapter::handleMessage(const std::string & message)
+Adapters::BaseAdapter::handleMessage(const std::string & str, uint64_t tag, handled_t finished)
 {
   std::cout << "Received message, queue size is: " << messages_.size() << std::endl;
   boost::mutex::scoped_lock lock(mutex_);
 
   if (messages_.size() >= MAX_ELEMS_IN_QUEUE)
     condition_.wait(lock);
+  Adapters::BaseAdapter::Message message(str, tag, finished);
   messages_.push(message);
   condition_.notify_one();
   std::cout << "Message handled" << std::endl;
@@ -27,7 +28,7 @@ Adapters::BaseAdapter::handleMessage(const std::string & message)
 void
 Adapters::BaseAdapter::run()
 {
-  std::string message;
+  Adapters::BaseAdapter::Message message;
   boost::this_thread::disable_interruption di;
 
   while (42)
@@ -40,8 +41,9 @@ Adapters::BaseAdapter::run()
       message = messages_.front();
       messages_.pop();
     }
-    this->message(message);
+    this->message(message.message);
     condition_.notify_one();
+    message.handled();
   }
 }
 

@@ -15,8 +15,22 @@ namespace Adapters
 {
   class BaseAdapter
   {
+    typedef std::function<void(uint64_t)> handled_t;
+
   private:
-    std::queue<const std::string> messages_;
+    struct Message {
+      std::string message;
+      uint64_t tag;
+      handled_t function;
+      Message() {}
+      Message(const std::string & message, uint64_t tag, handled_t function) : message(message), tag(tag), function(function) {}
+      void handled() const
+      {
+        function(tag);
+      }
+    };
+
+    std::queue<const Message> messages_;
     std::shared_ptr<boost::thread> thread_;
     boost::mutex                  mutex_;
     boost::condition_variable     condition_;
@@ -37,7 +51,7 @@ namespace Adapters
      * It will secure the environment and your message() function will be called
      * when it is time.
      */
-    void handleMessage(const std::string & message);
+    void handleMessage(const std::string & message, uint64_t, handled_t);
     /*!
      * Careful, if your adapter fails, the message will be lost!
      * Your algorithm must start in this function, you can use whatever you want

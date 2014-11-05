@@ -47,6 +47,7 @@ protected:
   void onError(AMQP::Connection *, const char *);
   void onClosed(AMQP::Connection *);
   void onReceived(const AMQP::Message &, uint64_t, bool);
+  void onHandled(uint64_t);
 public:
   AMQPHandler(const Configuration &);
 };
