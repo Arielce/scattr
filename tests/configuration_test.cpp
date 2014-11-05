@@ -35,7 +35,7 @@ public:
   {
     CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "ConfigurationTest" );
     suiteOfTests->addTest( new CppUnit::TestCaller<ConfigurationTest>(
-                                   "testArgumentAvailability",
+                                   "Test if arguments are available",
                                    &ConfigurationTest::testArgumentAvailability ) );
     return suiteOfTests;
   }
