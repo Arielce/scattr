@@ -7,6 +7,8 @@
 # define  AMQP_DEFAULT_HOST     "localhost"
 # define  DEFAULT_LOG_PATH      "/var/log/notifier/access.log"
 # define  DEFAULT_CONFIG_PATH   "/etc/needbook/notifier/notifier.conf"
+# define  DEFAULT_USER          "guest"
+# define  DEFAULT_PASSWORD      "guest"
 
 namespace po = boost::program_options;
 
