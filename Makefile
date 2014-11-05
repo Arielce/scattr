@@ -30,7 +30,7 @@ DEPS_TESTS := $(patsubst %.cpp,$(OBJDIR)/%.d,$(SRCS_TESTS))
 
 SAVES = ./.save
 
-all: $(EXEC) test
+all: $(EXEC)
 
 $(EXEC): buildrepo $(OBJS)
 	@echo "Building" $@
