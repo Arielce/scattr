@@ -32,7 +32,7 @@ public:
    * Get adapters_
    */
   const AdaptersContainer & getAdapters() const;
-  std::shared_ptr<Adapters::BaseAdapter> operator[](const std::string &);
+  std::shared_ptr<Adapters::BaseAdapter> & operator[](const std::string &);
   iterator begin();
   iterator end();
   const_iterator begin() const;

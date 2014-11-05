@@ -27,10 +27,10 @@ AdaptersFactory::getAdapters() const
   return adapters_;
 }
 
-std::shared_ptr<Adapters::BaseAdapter>
+std::shared_ptr<Adapters::BaseAdapter> &
 AdaptersFactory::operator[](const std::string & key)
 {
-  return adapters_[key];
+  return adapters_.at(key);
 }
 
 /**
