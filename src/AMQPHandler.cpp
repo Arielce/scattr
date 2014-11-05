@@ -3,6 +3,8 @@
 namespace ph = std::placeholders;
 
 const std::string
+AMQPHandler::VHOST = "/";
+const std::string
 AMQPHandler::EXCHANGE_NAME = "nb_notifier_exch";
 const std::string
 AMQPHandler::QUEUE_NAME = "nb_notifier_queue";
@@ -14,8 +16,10 @@ AMQPHandler::AMQPHandler(const Configuration & conf)
 {
   std::string source = conf["source"].as<std::string>();
   int port = conf["port"].as<int>();
+  username_ = conf["user"].as<std::string>();
+  password_ = conf["password"].as<std::string>();
   socket_ = std::make_shared<TCPClient>(source, port);
-  socket_->onAction(std::bind(&AMQPHandler::action, this, std::placeholders::_1, std::placeholders::_2));
+  socket_->onAction(std::bind(&AMQPHandler::action, this, ph::_1, ph::_2));
   socket_->run();
   std::cout << "Trying to connect to AMQP " << source << ":" << port << "..." << std::endl;
   socket_->wait();
@@ -30,7 +34,7 @@ AMQPHandler::action(TCPClient::action action, const std::string & buf)
   {
     if (connection_) // close former connection
       connection_->close();
-    connection_ = std::make_shared<AMQP::Connection>(this, AMQP::Login("guest","guest"), "/");
+    connection_ = std::make_shared<AMQP::Connection>(this, AMQP::Login(username_, password_), VHOST);
   }
   else if (action == TCPClient::RECEIVED && connection_)
   {
