@@ -117,7 +117,7 @@ TCPClient::good() const
 void
 TCPClient::wait()
 {
-  boost::unique_lock<boost::mutex> lock(mutex_);
+  boost::mutex::scoped_lock lock(mutex_);
   while (!this->good())
     condition_.wait(lock);
 }
