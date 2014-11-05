@@ -13,3 +13,9 @@ Adapters::IOSAdapter::addConfiguration(po::options_description & desc)
   ("ios-cert", po::value<std::string>()->default_value(CONFIG_PATH("ios-cert.pem")))
   ("ios-key", po::value<std::string>()->default_value(CONFIG_PATH("ios-key.pem")));
 }
+
+void
+Adapters::IOSAdapter::message(const std::string & message)
+{
+  (void)message;
+}

@@ -23,6 +23,17 @@ namespace Adapters
      * You should override this method in your Adapter.
      */
     virtual void addConfiguration(po::options_description &);
+    /*!
+     * This function is not virtual because it is not aimed at being overrided.
+     * It will secure the environment and your message() function will be called
+     * when it is time.
+     */
+    void handleMessage(const std::string & message);
+    /**
+     * Careful, if your adapter fails, the message will be lost!
+     * Your algorithm must start in this function, you can use whatever you want
+     */
+    virtual void message(const std::string & message) = 0;
   };
 };
 

@@ -10,6 +10,7 @@ namespace Adapters
   {
     std::string getName() const;
     void addConfiguration(po::options_description &);
+    void message(const std::string &);
   };
 };
 
