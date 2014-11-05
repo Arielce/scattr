@@ -56,7 +56,7 @@ Adapters::BaseAdapter::launchThread()
 void
 Adapters::BaseAdapter::refresh()
 {
-  if (thread_->timed_join(boost::posix_time::milliseconds(0)))
+  if (!thread_->timed_join(boost::posix_time::milliseconds(0)))
     return; // still alive
   this->launchThread();
 }
