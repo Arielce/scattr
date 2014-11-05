@@ -3,8 +3,11 @@
 
 # include <string>
 # include <boost/program_options.hpp>
+# include <boost/thread.hpp>
+# include <queue>
 
 # define  CONFIG_PATH(file)   "/etc/needbook/notifier/adapters/" file
+# define  MAX_ELEMS_IN_QUEUE  5
 
 namespace po = boost::program_options;
 
@@ -12,7 +15,13 @@ namespace Adapters
 {
   class BaseAdapter
   {
+  private:
+    std::queue<const std::string> messages_;
+    std::shared_ptr<boost::thread> thread_;
+    boost::mutex                  mutex_;
+    boost::condition_variable     condition_;
   public:
+    BaseAdapter();
     /*!
      * Get the name of the adapter, will also be the name of the AMQP routing key.
      */
@@ -34,6 +43,8 @@ namespace Adapters
      * Your algorithm must start in this function, you can use whatever you want
      */
     virtual void message(const std::string & message) = 0;
+  private:
+    void run();
   };
 };
 
