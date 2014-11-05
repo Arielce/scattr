@@ -3,10 +3,10 @@
 
 # include <boost/program_options.hpp>
 
-# define  AMQP_DEFAULT_PORT 5672
-# define  AMQP_DEFAULT_HOST "localhost"
-# define  DEFAULT_LOG_PATH  "/var/log/notifier/access.log"
-# define  DEFAULT_CONFIG_PATH "/etc/needbook/notifier/notifier.conf"
+# define  AMQP_DEFAULT_PORT     5672
+# define  AMQP_DEFAULT_HOST     "localhost"
+# define  DEFAULT_LOG_PATH      "/var/log/notifier/access.log"
+# define  DEFAULT_CONFIG_PATH   "/etc/needbook/notifier/notifier.conf"
 
 namespace po = boost::program_options;
 
