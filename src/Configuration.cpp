@@ -13,8 +13,8 @@ Configuration::Configuration(int argc, char** argv, char** env)
     ("help", "Print usage")
     ("source,s", po::value<std::string>()->default_value(AMQP_DEFAULT_HOST), "Set the AMQP host source")
     ("port", po::value<int>()->default_value(AMQP_DEFAULT_PORT), "Set the AMQP port")
-    ("user,u", po::value<std::string>(), "Set the AMQP user credential")
-    ("password,p", po::value<std::string>(), "Set the AMQP password credential")
+    ("user,u", po::value<std::string>()->default_value(""), "Set the AMQP user credential")
+    ("password,p", po::value<std::string>()->default_value(""), "Set the AMQP password credential")
     ("log,o", po::value<std::string>()->default_value(DEFAULT_LOG_PATH), "Set the log file")
     ("config,c", po::value<std::string>()->default_value(DEFAULT_CONFIG_PATH), "Set the config file path");
 
