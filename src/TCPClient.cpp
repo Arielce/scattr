@@ -104,7 +104,7 @@ TCPClient::run()
   if (thread_)
     return thread_;
 
-  thread_ = std::shared_ptr<boost::thread>(new boost::thread(boost::bind(&boost::asio::io_service::run, &io_service_)));
+  thread_ = std::make_shared<boost::thread>(boost::bind(&boost::asio::io_service::run, &io_service_));
   return thread_;
 }
 
