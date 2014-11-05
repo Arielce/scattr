@@ -2,7 +2,6 @@
 
 Adapters::BaseAdapter::BaseAdapter()
 {
-  this->launchThread();
 }
 
 void
@@ -33,7 +32,9 @@ Adapters::BaseAdapter::run()
   {
     {
       boost::mutex::scoped_lock  lock(mutex_);
-
+      std::cout << messages_.size() << " " << threads_.size() << " " << (messages_.size() / MAX_ELEMS_IN_QUEUE) << std::endl;
+      if (threads_.size() > (messages_.size() / MAX_ELEMS_IN_QUEUE))
+        return ;
       while (messages_.empty())
         condition_.wait(lock);
       message = messages_.front();
