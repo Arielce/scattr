@@ -97,7 +97,15 @@ void
 AMQPHandler::onReceived(const AMQP::Message &message, uint64_t deliveryTag, bool redelivered)
 {
   (void)redelivered;
-  std::cout << "received message " << message.message() << std::endl;
+  try
+  {
+    auto adapter = AdaptersFactory::getInstance()->operator[](message.routingKey());
+    adapter->handleMessage(message.message());
+  }
+  catch (const std::out_of_range & oor)
+  {
+    std::cerr << "Use of inexistant adapter: " << message.routingKey() << std::endl;
+  }
   channel_->ack(deliveryTag);
 }
 
