@@ -2,7 +2,7 @@
 
 Adapters::BaseAdapter::BaseAdapter()
 {
-  thread_ = std::make_shared<boost::thread>(boost::bind(&Adapters::BaseAdapter::run, this));
+  this->launchThread();
 }
 
 void
@@ -14,7 +14,7 @@ Adapters::BaseAdapter::addConfiguration(po::options_description & desc)
 void
 Adapters::BaseAdapter::handleMessage(const std::string & message)
 {
-  std::cout << "Received message" << std::endl;
+  std::cout << "Received message, queue size is: " << messages_.size() << std::endl;
   boost::mutex::scoped_lock lock(mutex_);
 
   if (messages_.size() >= MAX_ELEMS_IN_QUEUE)
@@ -28,6 +28,7 @@ void
 Adapters::BaseAdapter::run()
 {
   std::string message;
+  boost::this_thread::disable_interruption di;
 
   while (42)
   {
@@ -42,4 +43,18 @@ Adapters::BaseAdapter::run()
     this->message(message);
     condition_.notify_one();
   }
+}
+
+void
+Adapters::BaseAdapter::launchThread()
+{
+  thread_ = std::make_shared<boost::thread>(boost::bind(&Adapters::BaseAdapter::run, this));
+}
+
+void
+Adapters::BaseAdapter::refresh()
+{
+  if (thread_->timed_join(boost::posix_time::milliseconds(0)))
+    return; // still alive
+  this->launchThread();
 }

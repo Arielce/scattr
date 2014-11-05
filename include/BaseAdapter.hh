@@ -38,13 +38,22 @@ namespace Adapters
      * when it is time.
      */
     void handleMessage(const std::string & message);
-    /**
+    /*!
      * Careful, if your adapter fails, the message will be lost!
      * Your algorithm must start in this function, you can use whatever you want
      */
     virtual void message(const std::string & message) = 0;
+
+    /*!
+     * This function is used to relaunch the adapter thread if it has exited
+     * for some reason. You don't need to worry about that if you're creating
+     * your own adapter. You should not override this function, thus why it is
+     * not virtual.
+     */
+    void refresh();
   private:
     void run();
+    void launchThread();
   };
 };
 
