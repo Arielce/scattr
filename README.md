@@ -16,10 +16,25 @@ Progress
 The architecture has been set up, and the project is almost usable right now if you feel like developing the adapters.
 I still have to develop some extra classes that will help during the development of those, but it shouldn't take too long.
 
-Help
-====
+FAQ
+===
 
-Add you own adapter
+How does it work?
+-----------------
+
+Notifier will get every message sent to a specific queue in your RabbitMQ and will call the adapter you want, passing it the message.  
+The adapter can makes whatever it wants, even though this program has been thought to send notifications to devices, you can also use an
+email adapter, or do time-consuming tasks.
+
+Why is it fast?
+---------------
+
+Notifier has been coded in C++ to improve general performances, but that's not all. This program is multithreaded and threads are created when you need them!
+If an adapter has too much messages to handle, a new thread will be created to accelerate it, and the thread will terminate itself once everything is back to normal.
+
+**Some load tests are yet to come**
+
+How to add my own adapter
 -------------------
 
 Just create your own adapter under the adapters directory. You **must** have a class inheriting from the `Adapters::BaseAdapter` abstract class.
