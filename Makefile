@@ -34,8 +34,6 @@ all: $(EXEC)
 
 $(EXEC): buildrepo $(OBJS)
 	@echo "Building" $@
-	@echo "Creating saves directory"
-	@mkdir -p $(SAVES)
 	@mkdir -p $(BIN_DIR)
 	@echo "$@: Linking objects files... "
 	@$(CXX) -o $(BIN_DIR)/$@ $(OBJS) $(LDFLAGS)
