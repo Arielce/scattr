@@ -1,0 +1,3 @@
+[submodule "libs/macgpusher"]
+	path = libs/macgpusher
+	url = git@github.com:needbook/MacGPusher.git

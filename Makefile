@@ -13,7 +13,8 @@ CXX = g++
 
 CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2
 
-LDFLAGS = -lboost_program_options -lboost_system -lboost_thread-mt -lcppunit -lamqpcpp
+LDFLAGS = -lboost_program_options -lboost_system -lboost_thread-mt -lcppunit -lamqpcpp \
+	-L./libs -lmacgpusher
 
 BIN_DIR = bin
 
@@ -30,7 +31,7 @@ DEPS_TESTS := $(patsubst %.cpp,$(OBJDIR)/%.d,$(SRCS_TESTS))
 
 SAVES = ./.save
 
-all: $(EXEC)
+all: libraries $(EXEC)
 
 $(EXEC): buildrepo $(OBJS)
 	@echo "Building" $@
@@ -40,6 +41,11 @@ $(EXEC): buildrepo $(OBJS)
 	@echo "$@: Linking objects files... "
 	@$(CXX) -o $(BIN_DIR)/$@ $(OBJS) $(LDFLAGS)
 	@echo "Linking done."
+
+libraries:
+	@echo "Building dependencies"
+	@make -C ./libs/macgpusher > /dev/null
+	@mv ./libs/macgpusher/libmacgpusher.so ./libs
 
 test: buildrepo $(OBJS) $(OBJS_TESTS)
 	@echo "Building " $@
