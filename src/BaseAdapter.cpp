@@ -10,6 +10,13 @@ Adapters::BaseAdapter::addConfiguration(po::options_description & desc)
   (void)desc;
 }
 
+bool
+Adapters::BaseAdapter::init(const Configuration & configuration)
+{
+  (void)configuration;
+  return true;
+}
+
 void
 Adapters::BaseAdapter::handleMessage(const std::string & str, uint64_t tag, handled_t finished)
 {
@@ -32,7 +39,6 @@ Adapters::BaseAdapter::run()
   {
     {
       boost::mutex::scoped_lock  lock(mutex_);
-      std::cout << messages_.size() << " " << threads_.size() << " " << (messages_.size() / MAX_ELEMS_IN_QUEUE) << std::endl;
       if (threads_.size() > (messages_.size() / MAX_ELEMS_IN_QUEUE))
         return ;
       while (messages_.empty())

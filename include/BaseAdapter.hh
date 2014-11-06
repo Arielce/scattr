@@ -5,6 +5,7 @@
 # include <boost/program_options.hpp>
 # include <boost/thread.hpp>
 # include <queue>
+# include "Configuration.hh"
 
 # define  CONFIG_PATH(file)   "/etc/needbook/notifier/adapters/" file
 # define  MAX_ELEMS_IN_QUEUE  3
@@ -22,6 +23,7 @@ namespace Adapters
       std::string message;
       uint64_t tag;
       handled_t function;
+
       Message() {}
       Message(const std::string & message, uint64_t tag, handled_t function) : message(message), tag(tag), function(function) {}
       void handled() const
@@ -46,6 +48,11 @@ namespace Adapters
      * You should override this method in your Adapter.
      */
     virtual void addConfiguration(po::options_description &);
+    /*!
+     * Init your adapter with given configuration.
+     * Refer to the documentation for examples on how to use the Configuration class.
+     */
+    virtual bool init(const Configuration &);
     /*!
      * This function is not virtual because it is not aimed at being overrided.
      * It will secure the environment and your message() function will be called
