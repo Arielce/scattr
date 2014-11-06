@@ -1,13 +1,22 @@
 #include <iostream>
 #include <amqpcpp.h>
+#include <openssl/crypto.h>
+#include <openssl/ssl.h>
 #include "Configuration.hh"
 #include "AdaptersFactory.hh"
 #include "AMQPHandler.hh"
+
+#ifdef __APPLE__
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 # define TIME_REFRESH_IN_MS 1000
 
 int main(int ac, char** av, char** env)
 {
+  std::cout << "Initializing ssl..." << std::endl;
+  SSL_load_error_strings();
+  SSL_library_init();
   try
   {
     Configuration conf(ac, av, env);
