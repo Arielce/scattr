@@ -33,6 +33,19 @@ AdaptersFactory::operator[](const std::string & key)
   return adapters_.at(key);
 }
 
+void
+AdaptersFactory::initAdapters(const Configuration & conf)
+{
+  for (auto & it : adapters_)
+  {
+    if (it.second->init(conf) == false)
+    {
+      std::cerr << "Unable to init adapter " << it.first << std::endl;
+      adapters_[it.first] = nullptr; // remove the adapter if init failed
+    }
+  }
+}
+
 /**
  * ITERATORS
  */
