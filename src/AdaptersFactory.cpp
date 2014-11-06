@@ -36,13 +36,17 @@ AdaptersFactory::operator[](const std::string & key)
 void
 AdaptersFactory::initAdapters(const Configuration & conf)
 {
-  for (auto & it : adapters_)
+  auto it = adapters_.begin();
+
+  while (it != adapters_.end())
   {
-    if (it.second->init(conf) == false)
+    if (it->second->init(conf) == false)
     {
-      std::cerr << "Unable to init adapter " << it.first << std::endl;
-      adapters_[it.first] = nullptr; // remove the adapter if init failed
+      std::cerr << "Unable to init adapter " << it->first << std::endl;
+      it = adapters_.erase(it);
     }
+    else
+      ++it;
   }
 }
 
