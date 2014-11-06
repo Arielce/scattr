@@ -67,7 +67,7 @@ Requirements
   - Boost library (program_options, assign, asio, thread)
   - CPPUnit (unit testing library)
   - [AMQP-CPP](https://github.com/CopernicaMarketingSoftware/AMQP-CPP)
-  - [MacGPusher](https://github.com/needbook/MacGPusherMacGPusher)
+  - [MacGPusher](https://github.com/needbook/MacGPusher)
 
 For the scripts located under `scripts`, which can be useful when developing on the project, you will need ruby with the following gems:
 
