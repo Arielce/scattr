@@ -3,7 +3,7 @@
 std::string
 Adapters::IOSAdapter::getName() const
 {
-  return "iOS";
+  return "ios";
 }
 
 void
@@ -18,4 +18,6 @@ void
 Adapters::IOSAdapter::message(const std::string & message)
 {
   (void)message;
+  boost::this_thread::sleep(boost::posix_time::milliseconds(2000));
+  std::cout << "IOS handled message" << std::endl;
 }
