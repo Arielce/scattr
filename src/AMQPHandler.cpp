@@ -53,31 +53,43 @@ void
 AMQPHandler::onConnected(AMQP::Connection *connection)
 {
   std::cout << "Connected to AMQP (valid credentials)" << std::endl;
+
   channel_ = std::unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
   channel_->setQos(QUALITY_OF_SERVICE);
-  channel_->declareExchange(EXCHANGE_NAME, AMQP::ExchangeType::topic).onSuccess([&]() {
+
+  channel_->declareExchange(EXCHANGE_NAME, AMQP::ExchangeType::direct).onSuccess([]()
+  {
     std::cout << "Exchange " << EXCHANGE_NAME << " declared successfully" << std::endl;
-    channel_->declareQueue(QUEUE_NAME, AMQP::durable).onSuccess([&]() {
-      std::cout << "Queue " << QUEUE_NAME << " declared successfully" << std::endl;
-      for (auto & adapter : *AdaptersFactory::getInstance())
-      {
-        channel_->bindQueue(EXCHANGE_NAME, QUEUE_NAME, adapter.second->getName()).onSuccess([&]() {
-          std::cout << "Queue " << QUEUE_NAME << " binded successfully with routing key " << adapter.second->getName() << std::endl;
-        }).onError([](const char *error) {
-          throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_BIND, error);
-        });
-      }
-      channel_->consume(QUEUE_NAME)
-      .onReceived(std::bind(&AMQPHandler::onReceived, this, ph::_1, ph::_2, ph::_3))
-      .onError([](const char *error) {
-        throw AMQPHandler::Error(AMQPHandler::Error::CONSUMING_START, error);
-      });
-    }).onError([](const char *error) {
-      throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_DECL, error);
-    });
   }).onError([](const char *error) {
     throw AMQPHandler::Error(AMQPHandler::Error::EXCHANGE_DECL, error);
   });
+  for (auto & adapter : *AdaptersFactory::getInstance())
+  {
+    std::ostringstream os;
+
+    os << QUEUE_NAME << "_" << adapter.first;
+    std::string queue_name = os.str();
+    channel_->declareQueue(queue_name, AMQP::durable).onSuccess([&, queue_name]()
+    {
+      std::cout << "Queue " << queue_name << " declared successfully" << std::endl;
+    }).onError([](const char *error) {
+      throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_DECL, error);
+    });
+    channel_->bindQueue(EXCHANGE_NAME, queue_name, adapter.first).onSuccess([&, queue_name]() {
+      std::cout << "Queue " << queue_name << " binded successfully with routing key " << adapter.second->getName() << std::endl;
+    }).onError([](const char *error) {
+      throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_BIND, error);
+    });
+    channel_->consume(queue_name)
+    .onReceived(std::bind(&AMQPHandler::onReceived, this, ph::_1, ph::_2, ph::_3))
+    .onSuccess([queue_name]() {
+      std::cout << "Start consuming from " << queue_name << std::endl;
+    })
+    .onError([](const char *error) {
+      throw AMQPHandler::Error(AMQPHandler::Error::CONSUMING_START, error);
+    });
+  }
+
 }
 
 void
