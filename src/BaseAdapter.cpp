@@ -75,7 +75,7 @@ Adapters::BaseAdapter::refresh()
 }
 
 size_t
-Adapters::BaserAdapter::getNbr() const
+Adapters::BaseAdapter::getNbr() const
 {
   return nbr_;
 }

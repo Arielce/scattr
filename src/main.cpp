@@ -11,6 +11,7 @@
 #endif
 
 # define TIME_REFRESH_IN_MS 1000
+# define NBR_LOOPS_DISPLAY  10
 
 int main(int ac, char** av, char** env)
 {
@@ -28,12 +29,20 @@ int main(int ac, char** av, char** env)
     AdaptersFactory::getInstance()->initAdapters(conf);
 
     AMQPHandler handler(conf);
+    char loops = 1;
     while (42)
     {
       boost::this_thread::sleep(boost::posix_time::milliseconds(TIME_REFRESH_IN_MS));
       // refresh adapters
       for (auto & adapter : *AdaptersFactory::getInstance())
+      {
+        if (loops == NBR_LOOPS_DISPLAY)
+          std::cout << "Adapter " << adapter.first << " handled " << adapter.second->getNbr() << " messages" << std::endl;
         adapter.second->refresh();
+      }
+      if (loops == NBR_LOOPS_DISPLAY)
+        loops = 0;
+      loops += 1;
     }
   }
   catch (Configuration::Error & e)
