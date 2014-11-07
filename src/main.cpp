@@ -16,6 +16,7 @@
 int main(int ac, char** av, char** env)
 {
   std::cout << "Initializing ssl..." << std::endl;
+  SSL_load_error_strings();
   SSL_library_init();
   try
   {

@@ -46,15 +46,13 @@ Configuration::getDesc(po::options_description & desc)
   }
   try
   {
-    std::string filename(DEFAULT_CONFIG_PATH);
-
-    if (this->count("config"))
-      filename = this->operator[]("config").as<std::string>();
+    std::string filename = this->operator[]("config").as<std::string>();
 
     std::ifstream file(filename);
     if (!file.is_open() && filename != DEFAULT_CONFIG_PATH)
       throw Configuration::Error(Configuration::Error::OPENING_FILE, filename);
-    po::store(po::parse_config_file(file, desc), *this);
+    if (file.is_open())
+      po::store(po::parse_config_file(file, desc), *this);
   }
   catch (po::error& e)
   {
