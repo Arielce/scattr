@@ -16,8 +16,8 @@ namespace Adapters
 {
   class BaseAdapter
   {
+  public:
     typedef std::function<void(uint64_t)> handled_t;
-
   private:
     struct Message {
       std::string message;
@@ -36,6 +36,7 @@ namespace Adapters
     std::list<std::shared_ptr<boost::thread>> threads_;
     boost::mutex                  mutex_;
     boost::condition_variable     condition_;
+    size_t                        nbr_;
   public:
     BaseAdapter();
     /*!
@@ -64,7 +65,6 @@ namespace Adapters
      * Your algorithm must start in this function, you can use whatever you want
      */
     virtual void message(const std::string & message) = 0;
-
     /*!
      * This function is used to relaunch the adapter thread if it has exited
      * for some reason. You don't need to worry about that if you're creating
@@ -72,6 +72,11 @@ namespace Adapters
      * not virtual.
      */
     void refresh();
+    /*!
+     * Get the number of messages handled by this adapter
+     * since the instance beginning.
+     */
+    size_t getNbr() const;
   private:
     void run();
     void launchThread();

@@ -1,6 +1,7 @@
 #include "BaseAdapter.hh"
 
 Adapters::BaseAdapter::BaseAdapter()
+  : nbr_(0)
 {
 }
 
@@ -43,6 +44,7 @@ Adapters::BaseAdapter::run()
         return ;
       while (messages_.empty())
         condition_.wait(lock);
+      nbr_++;
       message = messages_.front();
       messages_.pop();
     }
@@ -70,4 +72,10 @@ Adapters::BaseAdapter::refresh()
   }
   if (threads_.size() < (messages_.size() / MAX_ELEMS_IN_QUEUE))
     this->launchThread();
+}
+
+size_t
+Adapters::BaserAdapter::getNbr() const
+{
+  return nbr_;
 }
