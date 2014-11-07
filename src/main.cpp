@@ -29,9 +29,10 @@ int main(int ac, char** av, char** env)
     AdaptersFactory::getInstance()->initAdapters(conf);
 
     AMQPHandler handler(conf);
-    char loops = 1;
+    char loops = 0;
     while (42)
     {
+      loops += 1;
       boost::this_thread::sleep(boost::posix_time::milliseconds(TIME_REFRESH_IN_MS));
       // refresh adapters
       for (auto & adapter : *AdaptersFactory::getInstance())
@@ -42,7 +43,6 @@ int main(int ac, char** av, char** env)
       }
       if (loops == NBR_LOOPS_DISPLAY)
         loops = 0;
-      loops += 1;
     }
   }
   catch (Configuration::Error & e)
