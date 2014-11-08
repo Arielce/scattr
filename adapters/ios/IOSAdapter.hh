@@ -4,6 +4,10 @@
 # include <string>
 # include "BaseAdapter.hh"
 # include "macgpusher/MMGAPNSConnection.hpp"
+# include "macgpusher/MMGDevice.hpp"
+# include "macgpusher/MMGIOSPayload.hpp"
+
+# define BUFFER_SIZE 1024
 
 namespace Adapters
 {
