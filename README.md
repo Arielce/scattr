@@ -16,6 +16,17 @@ Progress
 The architecture has been set up, and the project is almost usable right now if you feel like developing the adapters.
 I still have to develop some extra classes that will help during the development of those, but it shouldn't take too long.
 
+Install
+=======
+
+*A docker file and a vagrant file are coming*, but if you want to install notifier yourself, please install all the dependencies (see Requirements below) and then:
+
+```bash
+make
+```
+
+The binary file will be locater in `./bin/notiifer`
+
 FAQ
 ===
 
@@ -63,11 +74,14 @@ If you develop your own adapter and you think it can be useful to other people, 
 Requirements
 ============
 
+If you choose to install **notifier** yourself, here are the dependencies:
+
   - C++ 11
   - Boost library (program_options, assign, asio, thread)
   - CPPUnit (unit testing library)
   - [AMQP-CPP](https://github.com/CopernicaMarketingSoftware/AMQP-CPP)
   - [MacGPusher](https://github.com/needbook/MacGPusher)
+  - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 
 For the scripts located under `scripts`, which can be useful when developing on the project, you will need ruby with the following gems:
 
