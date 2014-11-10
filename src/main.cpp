@@ -15,9 +15,6 @@
 
 int main(int ac, char** av, char** env)
 {
-  std::cout << "Initializing ssl..." << std::endl;
-  SSL_load_error_strings();
-  SSL_library_init();
   try
   {
     Configuration conf(ac, av, env);
@@ -27,8 +24,11 @@ int main(int ac, char** av, char** env)
       std::cout << conf << std::endl;
       return EXIT_SUCCESS;
     }
+    std::cout << "Initializing ssl..." << std::endl;
+    SSL_load_error_strings();
+    SSL_library_init();
     AdaptersFactory::getInstance()->initAdapters(conf);
-
+    std::cout << "Initializing AMQP..." << std::endl;
     AMQPHandler handler(conf);
     char loops = 0;
     while (42)

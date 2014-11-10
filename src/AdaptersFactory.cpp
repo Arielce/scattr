@@ -46,6 +46,7 @@ AdaptersFactory::operator[](const std::string & key)
 void
 AdaptersFactory::initLogging(const Configuration & conf)
 {
+  std::cout << "Initializing logger..." << std::endl;
   std::ostringstream os(conf["log"].as<std::string>());
   os << "/notifier.%N.log";
 
@@ -65,13 +66,18 @@ AdaptersFactory::initAdapters(const Configuration & conf)
   auto it = adapters_.begin();
   while (it != adapters_.end())
   {
+    std::cout << "Initializing adapter " << it->first << "...";
+    std::cout.flush();
     if (it->second->init(conf) == false)
     {
-      std::cerr << "Unable to init adapter " << it->first << std::endl;
+      std::cerr << " Error!" << std::endl;
       it = adapters_.erase(it);
     }
     else
+    {
+      std::cout << " Done!" << std::endl;
       ++it;
+    }
   }
 }
 
