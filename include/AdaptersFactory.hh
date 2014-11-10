@@ -27,6 +27,7 @@ private:
    */
   AdaptersFactory();
   template<typename A> void add();
+  void initLogging(const Configuration &);
 public:
   /*!
    * Get adapters_
