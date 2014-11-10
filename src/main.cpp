@@ -46,9 +46,9 @@ int main(int ac, char** av, char** env)
         loops = 0;
     }
   }
-  catch (Configuration::Error & e)
+  catch (std::exception & e)
   {
-    std::cout << e.what() << std::endl;
+    std::cerr << e.what() << std::endl;
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
