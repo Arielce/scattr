@@ -13,7 +13,13 @@ CXX = g++
 
 CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2
 
-LDFLAGS = -lboost_program_options -lboost_system -lboost_thread-mt -lcppunit -lamqpcpp -lmacgpusher -lcrypto -lssl
+BOOST_SUFFIX = -mt
+
+LDFLAGS = -lboost_program_options$(BOOST_SUFFIX) -lboost_system$(BOOST_SUFFIX) \
+					-lboost_thread$(BOOST_SUFFIX) -lboost_filesystem$(BOOST_SUFFIX)  \
+					-lboost_date_time$(BOOST_SUFFIX) -lboost_log_setup$(BOOST_SUFFIX) \
+					-lboost_log$(BOOST_SUFFIX) \
+					-lcppunit -lamqpcpp -lmacgpusher -lcrypto -lssl
 
 BIN_DIR = bin
 
