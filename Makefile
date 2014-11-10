@@ -11,7 +11,9 @@ EXEC = notifier
 
 CXX = g++
 
-CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2 -DBOOST_ALL_DYN_LINK
+CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2 \
+					 -DBOOST_ALL_DYN_LINK \
+					 -Dnblog="BOOST_LOG(AdaptersFactory::getInstance()->logger())"
 
 BOOST_SUFFIX = -mt
 

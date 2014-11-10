@@ -57,7 +57,6 @@ AdaptersFactory::initLogging(const Configuration & conf)
   boost::shared_ptr<std::ostream> stream(&std::clog, bl::empty_deleter());
   sink->locked_backend()->add_stream(stream);
   bl::core::get()->add_sink(sink);
-  BOOST_LOG(logger()) << "Start logging instance";
 }
 
 bl::sources::logger_mt &
@@ -71,22 +70,16 @@ AdaptersFactory::logger()
 void
 AdaptersFactory::initAdapters(const Configuration & conf)
 {
-  this->initLogging(conf);
   auto it = adapters_.begin();
+  bool result;
   while (it != adapters_.end())
   {
-    std::cout << "Initializing adapter " << it->first << "...";
-    std::cout.flush();
-    if (it->second->init(conf) == false)
-    {
-      std::cerr << " Error!" << std::endl;
+    result = it->second->init(conf);
+    nblog << "Initializing adapter " << it->first << "... " << (result ? "Done!" : "Error!");
+    if (result == false)
       it = adapters_.erase(it);
-    }
     else
-    {
-      std::cout << " Done!" << std::endl;
       ++it;
-    }
   }
 }
 

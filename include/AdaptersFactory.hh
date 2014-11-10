@@ -34,7 +34,6 @@ private:
    */
   AdaptersFactory();
   template<typename A> void add();
-  void initLogging(const Configuration &);
 public:
   /*!
    * Get adapters_
@@ -42,6 +41,7 @@ public:
   const AdaptersContainer & getAdapters() const;
   std::shared_ptr<Adapters::BaseAdapter> & operator[](const std::string &);
   void initAdapters(const Configuration &);
+  void initLogging(const Configuration &);
   iterator begin();
   iterator end();
   const_iterator begin() const;

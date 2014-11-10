@@ -26,10 +26,7 @@ Adapters::IOSAdapter::init(const Configuration & configuration)
 
   connection_ = std::make_shared<MMGAPNSConnection>(ca, cert, key, passphrase, true);
   if (connection_->OpenConnection() != MMGConnectionError::MMGNoError)
-  {
-    nblog << "Could not open connection to APN server";
     return false;
-  }
   return true;
 }
 
@@ -52,7 +49,7 @@ Adapters::IOSAdapter::message(const std::string & message)
   size_t notif = 1;
   if (nbr <= 0)
   {
-    std::cerr << "iOS handler: Bad number of recipients" << int(nbr) << std::endl;
+    nblog << "Bad number of recipients: " << int(nbr);
     return;
   }
   std::vector<MMGDevice*> devices;
@@ -71,7 +68,7 @@ Adapters::IOSAdapter::message(const std::string & message)
   sound = buf;
   if (is.eof())
   {
-    std::cerr << "iOS handler: Bad message format" << std::endl;
+    nblog << "Bad message format";
     return;
   }
   while (!is.eof())

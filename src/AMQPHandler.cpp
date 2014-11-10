@@ -21,9 +21,9 @@ AMQPHandler::AMQPHandler(const Configuration & conf)
   socket_ = std::make_shared<TCPClient>(source, port);
   socket_->onAction(std::bind(&AMQPHandler::action, this, ph::_1, ph::_2));
   socket_->run();
-  std::cout << "Trying to connect to AMQP " << source << ":" << port << "..." << std::endl;
+  nblog << "Trying to connect to AMQP " << source << ":" << port << "...";
   socket_->wait();
-  std::cout << "Connection successful" << std::endl;
+  nblog << "Connection successful";
 }
 
 void
@@ -52,14 +52,14 @@ AMQPHandler::onData(AMQP::Connection *connection, const char *data, size_t size)
 void
 AMQPHandler::onConnected(AMQP::Connection *connection)
 {
-  std::cout << "Connected to AMQP (valid credentials)" << std::endl;
+  nblog << "Connected to AMQP (valid credentials)";
 
   channel_ = std::unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
   channel_->setQos(QUALITY_OF_SERVICE);
 
   channel_->declareExchange(EXCHANGE_NAME, AMQP::ExchangeType::direct).onSuccess([]()
   {
-    std::cout << "Exchange " << EXCHANGE_NAME << " declared successfully" << std::endl;
+    nblog << "Exchange " << EXCHANGE_NAME << " declared successfully";
   }).onError([](const char *error) {
     throw AMQPHandler::Error(AMQPHandler::Error::EXCHANGE_DECL, error);
   });
@@ -71,19 +71,19 @@ AMQPHandler::onConnected(AMQP::Connection *connection)
     std::string queue_name = os.str();
     channel_->declareQueue(queue_name, AMQP::durable).onSuccess([&, queue_name]()
     {
-      std::cout << "Queue " << queue_name << " declared successfully" << std::endl;
+      nblog << "Queue " << queue_name << " declared successfully";
     }).onError([](const char *error) {
       throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_DECL, error);
     });
     channel_->bindQueue(EXCHANGE_NAME, queue_name, adapter.first).onSuccess([&, queue_name]() {
-      std::cout << "Queue " << queue_name << " binded successfully with routing key " << adapter.second->getName() << std::endl;
+      nblog << "Queue " << queue_name << " binded successfully with routing key " << adapter.second->getName();
     }).onError([](const char *error) {
       throw AMQPHandler::Error(AMQPHandler::Error::QUEUE_BIND, error);
     });
     channel_->consume(queue_name)
     .onReceived(std::bind(&AMQPHandler::onReceived, this, ph::_1, ph::_2, ph::_3))
     .onSuccess([queue_name]() {
-      std::cout << "Start consuming from " << queue_name << std::endl;
+      nblog << "Start consuming from " << queue_name;
     })
     .onError([](const char *error) {
       throw AMQPHandler::Error(AMQPHandler::Error::CONSUMING_START, error);
@@ -116,7 +116,7 @@ AMQPHandler::onReceived(const AMQP::Message &message, uint64_t deliveryTag, bool
   }
   catch (const std::out_of_range & oor)
   {
-    std::cerr << "Use of inexistant adapter: " << message.routingKey() << std::endl;
+    nblog << "Use of inexistant adapter: " << message.routingKey();
   }
 }
 

@@ -24,11 +24,12 @@ int main(int ac, char** av, char** env)
       std::cout << conf << std::endl;
       return EXIT_SUCCESS;
     }
-    std::cout << "Initializing ssl..." << std::endl;
+    AdaptersFactory::getInstance()->initLogging(conf);
+    nblog << "Initializing ssl...";
     SSL_load_error_strings();
     SSL_library_init();
     AdaptersFactory::getInstance()->initAdapters(conf);
-    std::cout << "Initializing AMQP..." << std::endl;
+    nblog << "Initializing AMQP...";
     AMQPHandler handler(conf);
     char loops = 0;
     while (42)
@@ -39,7 +40,7 @@ int main(int ac, char** av, char** env)
       for (auto & adapter : *AdaptersFactory::getInstance())
       {
         if (loops == NBR_LOOPS_DISPLAY)
-          std::cout << "Adapter " << adapter.first << " handled " << adapter.second->getNbr() << " messages" << std::endl;
+          nblog << "Adapter " << adapter.first << " handled " << adapter.second->getNbr() << " messages";
         adapter.second->refresh();
       }
       if (loops == NBR_LOOPS_DISPLAY)

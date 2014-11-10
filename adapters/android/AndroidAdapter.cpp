@@ -19,5 +19,5 @@ Adapters::AndroidAdapter::message(const std::string & message)
 {
   (void)message;
   boost::this_thread::sleep(boost::posix_time::milliseconds(2000));
-  std::cout << "Android handled message" << std::endl;
+  nblog << "Android handled message";
 }
