@@ -26,7 +26,10 @@ Adapters::IOSAdapter::init(const Configuration & configuration)
 
   connection_ = std::make_shared<MMGAPNSConnection>(ca, cert, key, passphrase, true);
   if (connection_->OpenConnection() != MMGConnectionError::MMGNoError)
-		return false;
+  {
+    nblog << "Could not open connection to APN server";
+    return false;
+  }
   return true;
 }
 
