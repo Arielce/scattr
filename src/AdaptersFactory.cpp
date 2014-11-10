@@ -1,5 +1,6 @@
 #include <boost/assign.hpp>
 #include <boost/log/support/date_time.hpp>
+#include <boost/log/utility/empty_deleter.hpp>
 #include "AdaptersFactory.hh"
 #include "Configuration.hh"
 
@@ -51,6 +52,11 @@ AdaptersFactory::initLogging(const Configuration & conf)
     bl::keywords::time_based_rotation = bl::sinks::file::rotation_at_time_point(0, 0, 0),
     bl::keywords::auto_flush = true
   )->set_formatter(formatter);
+  typedef bl::sinks::synchronous_sink<bl::sinks::text_ostream_backend> text_sink;
+  boost::shared_ptr<text_sink> sink = boost::make_shared<text_sink>();
+  boost::shared_ptr<std::ostream> stream(&std::clog, bl::empty_deleter());
+  sink->locked_backend()->add_stream(stream);
+  bl::core::get()->add_sink(sink);
   BOOST_LOG(logger()) << "Start logging instance";
 }
 

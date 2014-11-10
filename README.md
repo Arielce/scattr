@@ -77,7 +77,7 @@ Requirements
 If you choose to install **notifier** yourself, here are the dependencies:
 
   - C++ 11
-  - Boost library (program_options, assign, asio, thread) **HAS to be compile with c++11!!**
+  - Boost library (program_options, assign, asio, thread) **HAS to be compiled using c++11!!**
   - CPPUnit (unit testing library)
   - [AMQP-CPP](https://github.com/CopernicaMarketingSoftware/AMQP-CPP)
   - [MacGPusher](https://github.com/needbook/MacGPusher)
