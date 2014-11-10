@@ -3,6 +3,13 @@
 
 # include <map>
 # include <memory>
+# include <boost/log/core.hpp>
+# include <boost/log/sinks.hpp>
+# include <boost/log/trivial.hpp>
+# include <boost/log/expressions.hpp>
+# include <boost/log/utility/setup/file.hpp>
+# include <boost/log/utility/setup/common_attributes.hpp>
+# include <boost/log/sources/logger.hpp>
 # include "BaseAdapter.hh"
 
 class Configuration;
@@ -43,6 +50,7 @@ public:
    * Get the unique instance of the Factory
    */
   static std::unique_ptr<AdaptersFactory>& getInstance();
+  static boost::log::sources::logger_mt & logger();
 };
 
 #endif

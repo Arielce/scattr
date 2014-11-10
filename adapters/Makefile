@@ -9,7 +9,10 @@
 
 CXX = g++
 
-CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I../include -c -std=c++11 -O2
+CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I../include -c -std=c++11 -O2 \
+					 -include ../include/AdaptersFactory.hh \
+					 -Dnblog="BOOST_LOG(AdaptersFactory::getInstance()->logger()) << \"$(shell dirname $<) adapter: \"" \
+					 -DBOOST_ALL_DYN_LINK
 
 BOOST_SUFFIX = -mt
 
@@ -29,8 +32,7 @@ $(OBJDIR)/adapters/%.o: %.cpp
 	@echo "Generating adapter dependencies for $<"
 	@$(call make-depend,$<,$@,$(subst .o,.d,$@))
 	@echo "Compiling $<"
-	@$(CXX) $(CXXFLAGS) $< -o $@ \
-					-DADAPTER_NAME=\"$(shell dirname $<)\" -include ../include/AdaptersFactory.hh
+	@$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
 	@echo "Erasing adapters objects files"

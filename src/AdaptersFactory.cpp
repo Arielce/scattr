@@ -1,11 +1,5 @@
-#define  BOOST_LOG_DYN_LINK
-
 #include <boost/assign.hpp>
-#include <boost/log/core.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/support/date_time.hpp>
 #include "AdaptersFactory.hh"
 #include "Configuration.hh"
 
@@ -47,16 +41,25 @@ void
 AdaptersFactory::initLogging(const Configuration & conf)
 {
   std::cout << "Initializing logger..." << std::endl;
-  std::ostringstream os(conf["log"].as<std::string>());
-  os << "/notifier.%N.log";
 
+  bl::core::get()->add_global_attribute("TimeStamp", boost::log::attributes::local_clock());
+  bl::formatter formatter = bl::expressions::stream << bl::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S") << "> " << bl::expressions::smessage;
   bl::add_file_log
   (
-    bl::keywords::file_name = os.str(),
+    bl::keywords::file_name = conf["log"].as<std::string>(),
     bl::keywords::rotation_size = 10 * 1024 * 1024,
     bl::keywords::time_based_rotation = bl::sinks::file::rotation_at_time_point(0, 0, 0),
-    bl::keywords::format = "[%TimeStamp%]: %Message%"
-  );
+    bl::keywords::auto_flush = true
+  )->set_formatter(formatter);
+  BOOST_LOG(logger()) << "Start logging instance";
+}
+
+bl::sources::logger_mt &
+AdaptersFactory::logger()
+{
+  static bl::sources::logger_mt lg;
+
+  return lg;
 }
 
 void

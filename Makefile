@@ -11,7 +11,7 @@ EXEC = notifier
 
 CXX = g++
 
-CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2
+CXXFLAGS = -W -Wall -Werror -Wextra -pedantic -I. -I./include -c -std=c++11 -O2 -DBOOST_ALL_DYN_LINK
 
 BOOST_SUFFIX = -mt
 
