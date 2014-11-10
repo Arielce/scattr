@@ -29,10 +29,11 @@ $(OBJDIR)/adapters/%.o: %.cpp
 	@echo "Generating adapter dependencies for $<"
 	@$(call make-depend,$<,$@,$(subst .o,.d,$@))
 	@echo "Compiling $<"
-	@$(CXX) $(CXXFLAGS) $< -o $@ -DADAPTER_NAME=\"$(shell dirname $<)\"
+	@$(CXX) $(CXXFLAGS) $< -o $@ \
+					-DADAPTER_NAME=\"$(shell dirname $<)\" -include ../include/AdaptersFactory.hh
 
 clean:
-	@echo "Erasing objects files"
+	@echo "Erasing adapters objects files"
 	@$(RM) -r $(OBJDIR)/adapters
 
 buildrepo:
