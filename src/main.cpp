@@ -7,7 +7,7 @@
 #include "AMQPHandler.hh"
 
 #ifdef __APPLE__
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 # define TIME_REFRESH_IN_MS 1000
@@ -40,6 +40,7 @@ int main(int ac, char** av, char** env)
       for (auto & adapter : *AdaptersFactory::getInstance())
       {
         if (loops == NBR_LOOPS_DISPLAY)
+          return 0;
           nblog << "Adapter " << adapter.first << " handled " << adapter.second->getNbr() << " messages";
         adapter.second->refresh();
       }

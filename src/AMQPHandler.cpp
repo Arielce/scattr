@@ -26,6 +26,10 @@ AMQPHandler::AMQPHandler(const Configuration & conf)
   nblog << "Connection successful";
 }
 
+AMQPHandler::~AMQPHandler()
+{
+}
+
 void
 AMQPHandler::action(TCPClient::action action, const std::string & buf)
 {
@@ -101,8 +105,11 @@ AMQPHandler::onError(AMQP::Connection *connection, const char *message)
 
 void
 AMQPHandler::onClosed(AMQP::Connection *connection) {
-  socket_->close();
   (void)connection;
+  if (channel_)
+    channel_ = nullptr;
+  if (connection_)
+    connection_ = nullptr;
 }
 
 void

@@ -35,12 +35,11 @@ private:
   static const std::string QUEUE_NAME;
   static const int QUALITY_OF_SERVICE;
 protected:
-  std::shared_ptr<TCPClient> socket_;
+  std::shared_ptr<TCPClient>    socket_;
   std::shared_ptr<AMQP::Connection> connection_;
   std::unique_ptr<AMQP::Channel> channel_;
   std::string                   username_;
   std::string                   password_;
-
   void action(TCPClient::action, const std::string &);
   void onData(AMQP::Connection *, const char *, size_t);
   void onConnected(AMQP::Connection *);
@@ -50,6 +49,7 @@ protected:
   void onHandled(uint64_t);
 public:
   AMQPHandler(const Configuration &);
+  virtual ~AMQPHandler();
 };
 
 #endif

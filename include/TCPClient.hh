@@ -39,6 +39,7 @@ private:
   boost::condition_variable condition_;
 public:
   TCPClient(const std::string &, int);
+  ~TCPClient();
 
   void write(const std::string &);
   void close();

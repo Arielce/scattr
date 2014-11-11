@@ -5,6 +5,10 @@ Adapters::BaseAdapter::BaseAdapter()
 {
 }
 
+Adapters::BaseAdapter::~BaseAdapter()
+{
+}
+
 void
 Adapters::BaseAdapter::addConfiguration(po::options_description & desc)
 {
@@ -34,7 +38,6 @@ void
 Adapters::BaseAdapter::run()
 {
   Adapters::BaseAdapter::Message message;
-  boost::this_thread::disable_interruption di;
 
   while (42)
   {
@@ -44,6 +47,7 @@ Adapters::BaseAdapter::run()
         return ;
       while (messages_.empty())
         condition_.wait(lock);
+      boost::this_thread::disable_interruption di;
       nbr_++;
       message = messages_.front();
       messages_.pop();

@@ -6,6 +6,12 @@ TCPClient::TCPClient(const std::string & server, int port)
   this->connect();
 }
 
+TCPClient::~TCPClient()
+{
+  io_service_.stop();
+  socket_.close();
+}
+
 void
 TCPClient::close()
 {

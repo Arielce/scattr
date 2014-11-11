@@ -40,6 +40,11 @@ namespace Adapters
   public:
     BaseAdapter();
     /*!
+     * Will interupt the threads before exiting (not during a message handing)
+     *
+     */
+    virtual ~BaseAdapter();
+    /*!
      * Get the name of the adapter, will also be the name of the AMQP routing key.
      */
     virtual std::string getName() const = 0;
