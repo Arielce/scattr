@@ -59,6 +59,12 @@ AdaptersFactory::initLogging(const Configuration & conf)
   bl::core::get()->add_sink(sink);
 }
 
+void
+AdaptersFactory::logging(bool st)
+{
+  bl::core::get()->set_logging_enabled(st);
+}
+
 bl::sources::logger_mt &
 AdaptersFactory::logger()
 {

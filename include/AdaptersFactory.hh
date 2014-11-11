@@ -29,6 +29,7 @@ private:
    */
   AdaptersContainer adapters_;
   static std::unique_ptr<AdaptersFactory> instance_;
+
   /*!
    * Creates a new AdaptersFactory and initializes adapters
    */
@@ -42,6 +43,7 @@ public:
   std::shared_ptr<Adapters::BaseAdapter> & operator[](const std::string &);
   void initAdapters(const Configuration &);
   void initLogging(const Configuration &);
+  void logging(bool);
   iterator begin();
   iterator end();
   const_iterator begin() const;
@@ -51,6 +53,7 @@ public:
    */
   static std::unique_ptr<AdaptersFactory>& getInstance();
   static boost::log::sources::logger_mt & logger();
+
 };
 
 #endif
