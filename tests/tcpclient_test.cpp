@@ -31,7 +31,6 @@ public:
 
   void tearDown()
   {
-    client->close();
   }
 
   void testConnected()

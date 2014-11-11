@@ -9,7 +9,8 @@ TCPClient::TCPClient(const std::string & server, int port)
 TCPClient::~TCPClient()
 {
   io_service_.stop();
-  socket_.close();
+  if (socket_.is_open())
+    socket_.close();
 }
 
 void
@@ -101,7 +102,8 @@ TCPClient::write(const std::string & data)
 void
 TCPClient::doClose()
 {
-  socket_.close();
+  if (socket_.is_open())
+    socket_.close();
 }
 
 std::shared_ptr<boost::thread>
