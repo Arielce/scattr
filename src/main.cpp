@@ -40,7 +40,6 @@ int main(int ac, char** av, char** env)
       for (auto & adapter : *AdaptersFactory::getInstance())
       {
         if (loops == NBR_LOOPS_DISPLAY)
-          return 0;
           nblog << "Adapter " << adapter.first << " handled " << adapter.second->getNbr() << " messages";
         adapter.second->refresh();
       }
