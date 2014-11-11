@@ -8,11 +8,13 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <stdexcept>
 #include <fstream>
-
+#include "AdaptersFactory.hh"
 
 int
 main( int argc, char* argv[] )
 {
+  // Disable logging
+  AdaptersFactory::getInstance()->logging(false);
   // Retreive test path from command line first argument. Default to "" which resolve
   // to the top level suite.
   std::string testPath = (argc > 1) ? std::string(argv[1]) : std::string("");
