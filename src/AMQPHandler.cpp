@@ -5,9 +5,9 @@ namespace ph = std::placeholders;
 const std::string
 AMQPHandler::VHOST = "/";
 const std::string
-AMQPHandler::EXCHANGE_NAME = "nb_notifier_exch";
+AMQPHandler::EXCHANGE_NAME = "nb_scattr_exch";
 const std::string
-AMQPHandler::QUEUE_NAME = "nb_notifier_queue";
+AMQPHandler::QUEUE_NAME = "nb_scattr_queue";
 const int
 AMQPHandler::QUALITY_OF_SERVICE = 10;
 

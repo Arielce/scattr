@@ -30,7 +30,7 @@
 # Emacs
 *~
 
-# Notifier specific
+# Scattr specific
 .dobjects
 doc
 bin

@@ -5,8 +5,8 @@
 
 # define  AMQP_DEFAULT_PORT     5672
 # define  AMQP_DEFAULT_HOST     "localhost"
-# define  DEFAULT_LOG_PATH      "/var/log/notifier/access.log"
-# define  DEFAULT_CONFIG_PATH   "/etc/needbook/notifier/notifier.conf"
+# define  DEFAULT_LOG_PATH      "/var/log/scattr/access.log"
+# define  DEFAULT_CONFIG_PATH   "/etc/needbook/scattr/scattr.conf"
 # define  DEFAULT_USER          "guest"
 # define  DEFAULT_PASSWORD      "guest"
 

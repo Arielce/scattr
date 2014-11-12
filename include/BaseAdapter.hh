@@ -7,7 +7,7 @@
 # include <queue>
 # include "Configuration.hh"
 
-# define  CONFIG_PATH(file)   "/etc/needbook/notifier/adapters/" file
+# define  CONFIG_PATH(file)   "/etc/needbook/scattr/adapters/" file
 # define  MAX_ELEMS_IN_QUEUE  3
 
 namespace po = boost::program_options;

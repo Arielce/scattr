@@ -8,7 +8,7 @@ conn.start
 keys = ['android', 'ios']
 
 ch   = conn.create_channel
-x    = ch.direct("nb_notifier_exch")
+x    = ch.direct("nb_scattr_exch")
 
 [*0..20].each do |i|
   key = keys.sample

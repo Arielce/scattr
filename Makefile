@@ -7,7 +7,7 @@
 #
 ###
 
-EXEC = notifier
+EXEC = scattr
 
 CXX = g++
 
