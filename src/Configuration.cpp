@@ -16,7 +16,8 @@ Configuration::Configuration(int argc, char** argv, char** env)
     ("user,u", po::value<std::string>()->default_value(DEFAULT_USER), "Set the AMQP user credential")
     ("password,p", po::value<std::string>()->default_value(DEFAULT_PASSWORD), "Set the AMQP password credential")
     ("log,o", po::value<std::string>()->default_value(DEFAULT_LOG_PATH), "Set the log file")
-    ("config,c", po::value<std::string>()->default_value(DEFAULT_CONFIG_PATH), "Set the config file path");
+    ("config,c", po::value<std::string>()->default_value(DEFAULT_CONFIG_PATH), "Set the config file path")
+    ("disable", po::value<std::vector<std::string>>(), "Disable adapters");
 
     this->getFromAdapters(desc_);
     this->getDesc(desc_);

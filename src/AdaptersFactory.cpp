@@ -78,10 +78,20 @@ AdaptersFactory::initAdapters(const Configuration & conf)
 {
   auto it = adapters_.begin();
   bool result;
+  bool disabled;
   while (it != adapters_.end())
   {
-    result = it->second->init(conf);
-    nblog << "Initializing adapter " << it->first << "... " << (result ? "Done!" : "Error!");
+    disabled = false;
+    result = true;
+    if (conf.count("disable"))
+    {
+      auto & ad_dis = conf["disable"].as<std::vector<std::string>>();
+      if (std::find(ad_dis.begin(), ad_dis.end(), it->first) != ad_dis.end())
+        disabled = true;
+    }
+    if (disabled == false)
+      result = it->second->init(conf);
+    nblog << "Initializing adapter " << it->first << "... " << (result ? (!disabled ? "Done!" : "Disabled.") : "Error!");
     if (result == false)
       it = adapters_.erase(it);
     else

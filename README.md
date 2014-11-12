@@ -69,7 +69,7 @@ Contribute
 
 This project is maintained by the Needbook team, but every contribution is welcome, just for the project and send pull requests!
 
-If you develop your own adapter and you think it can be useful to other people, you are encourage to send a pull request with it.
+If you develop your own adapter and you think it can be useful to other people, you are encouraged to send a pull request with it.
 
 Requirements
 ============
