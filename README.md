@@ -77,9 +77,9 @@ Requirements
 If you choose to install **Scattr** yourself, here are the dependencies:
 
   - C++ 11
-  - Boost library (program_options, assign, asio, thread) **HAS to be compiled using c++11!!**
+  - Boost library (program_options, assign, asio, thread) **HAS to be compiled using c++11!!** ***> 1.54.0***
   - CPPUnit (unit testing library)
-  - [AMQP-CPP](https://github.com/CopernicaMarketingSoftware/AMQP-CPP)
+  - [AMQP-CPP](https://github.com/needbook/AMQP-CPP)
   - [MacGPusher](https://github.com/needbook/MacGPusher)
   - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 
