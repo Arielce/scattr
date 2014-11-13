@@ -12,6 +12,6 @@ namespace Adapters
     void addConfiguration(po::options_description &);
     void message(const std::string &);
   };
-};
+}
 
 #endif

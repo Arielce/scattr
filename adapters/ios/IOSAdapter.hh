@@ -21,6 +21,6 @@ namespace Adapters
     bool init(const Configuration &);
     void message(const std::string &);
   };
-};
+}
 
 #endif
