@@ -32,7 +32,7 @@ namespace Adapters
       }
     };
 
-    std::queue<const Message> messages_;
+    std::queue<Message> messages_;
     std::list<std::shared_ptr<boost::thread>> threads_;
     boost::mutex                  mutex_;
     boost::condition_variable     condition_;
