@@ -41,7 +41,7 @@ Adapters::IOSAdapter::init(const Configuration & configuration)
 void
 Adapters::IOSAdapter::message(const std::string & message)
 {
-  char buf[BUFFER_SIZE];
+  char* buf = new char[BUFFER_SIZE];
   char nbr = message[0];
   std::string title;
   std::string content;
@@ -69,6 +69,7 @@ Adapters::IOSAdapter::message(const std::string & message)
   if (is.eof())
   {
     nblog << "Bad message format";
+    delete buf;
     return;
   }
   while (!is.eof())
@@ -76,6 +77,7 @@ Adapters::IOSAdapter::message(const std::string & message)
     is.getline(buf, BUFFER_SIZE);
     content += buf;
   }
+  delete buf;
   MMGIOSPayload payload(title, content, 1, sound);
   for (auto & device : devices)
   {
