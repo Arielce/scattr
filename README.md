@@ -43,7 +43,7 @@ If you want to install *Scattr* yourself, please install all the dependencies (s
 make
 ```
 
-The binary file will be locater in `./bin/notiifer`
+The binary file will be located in `./bin/scattr`
 
 FAQ
 ===
@@ -95,7 +95,7 @@ Requirements
 If you choose to install **Scattr** yourself, here are the dependencies:
 
   - C++ 11
-  - Boost library (program_options, assign, asio, thread) **HAS to be compiled using c++11!!** ***> 1.54.0***
+  - Boost library (program_options, assign, asio, thread) ***>= 1.54.0***
   - CPPUnit (unit testing library)
   - [AMQP-CPP](https://github.com/needbook/AMQP-CPP)
   - [MacGPusher](https://github.com/needbook/MacGPusher)
