@@ -29,6 +29,8 @@ cd scattr
 docker build -t scattr .
 # Run scattr this way:
 docker run scattr --help
+# or, for it to run in the background:
+docker run -d scattr # ... params
 ```
 
 
