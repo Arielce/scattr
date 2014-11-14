@@ -19,7 +19,23 @@ I still have to develop some extra classes that will help during the development
 Install
 =======
 
-*A docker file and a vagrant file are coming*, but if you want to install *Scattr* yourself, please install all the dependencies (see Requirements below) and then:
+Docker
+------
+
+A Dockerfile is there for you to use:
+
+```bash
+cd scattr
+docker build -t scattr .
+# Run scattr this way:
+docker run scattr --help
+```
+
+
+DIY
+---
+
+If you want to install *Scattr* yourself, please install all the dependencies (see Requirements below) and then:
 
 ```bash
 make
