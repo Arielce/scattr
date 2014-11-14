@@ -11,6 +11,6 @@ RUN wget https://github.com/needbook/MacGPusher/archive/v1.0.0.tar.gz ; tar -xzf
 COPY . /scattr
 
 WORKDIR /scattr
-RUN cd /scattr ; make fclean ; make
+RUN make fclean ; make ; make test
 RUN mkdir -p /etc/scattr
-ENTRYPOINT [ '/scattr/bin/scattr' ]
+ENTRYPOINT [ "bin/scattr" ]
