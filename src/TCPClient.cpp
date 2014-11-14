@@ -36,7 +36,8 @@ TCPClient::onConnect(const boost::system::error_code& error_code, tcp::resolver:
   {
     socket_.close();
     connected_ = false;
-    socket_.async_connect(*end_point_iter,
+    tcp::endpoint ep = *end_point_iter;
+    socket_.async_connect(ep,
       boost::bind(&TCPClient::onConnect, this, boost::asio::placeholders::error, ++end_point_iter));
     return;
   }
@@ -55,8 +56,9 @@ TCPClient::connect()
   tcp::resolver resolver(io_service_);
   tcp::resolver::query query(server_, os.str());
   tcp::resolver::iterator end_point_iter = resolver.resolve(query);
+  tcp::endpoint ep = *end_point_iter;
 
-  socket_.async_connect(*end_point_iter,
+  socket_.async_connect(ep,
     boost::bind(&TCPClient::onConnect, this, boost::asio::placeholders::error, ++end_point_iter));
 }
 
