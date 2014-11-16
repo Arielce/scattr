@@ -63,10 +63,21 @@ If an adapter has too much messages to handle, a new thread will be created to a
 
 **Some load tests are yet to come**
 
+How to send a message to an adapter
+-----------------------------------
+
+You will have to send the messages to queues named this way: `nb_scattr_queue_adaptername`.  
+The format is json in all the adapters that are available in this repository. Pay attention to custom adapters as they may not be using JSON for their adapters.  
+If you want more information about the fields that an adapter awaits, please see its own README, which should be located in its directory.
+
+Libraries exists in the following languages (all adapters may not be supported, as they will only support JSON):
+
+  - Node.js, [scattr-nodejs](https://github.com/needbook/scattr-nodejs)
+
 How to add my own adapter
 -------------------
 
-Just create your own adapter under the adapters directory. You **must** have a class inheriting from the `Adapters::BaseAdapter` abstract class.
+Just create your own adapter under the adapters directory. You **must** have a class inheriting from the `Adapters::BaseAdapter` abstract class. Preferably, you'll add your adapter in the `Adapters` namespace.
 
 When you're done, in order for Scattr to use it, you must add it in the `AdaptersFactory` class. To do so, open `src/AdaptersFactory.cpp`, `#include` your header file,
 and in the `AdaptersFactory::AdaptersFactory` constructor function, add you adapter this way:
@@ -75,7 +86,7 @@ and in the `AdaptersFactory::AdaptersFactory` constructor function, add you adap
 AdaptersFactory::AdaptersFactory()
 {
   //...
-  add<Adapters::AndroidAdapter>();
+  add<Adapters::YourAdapter>();
   //...
 }
 ```
