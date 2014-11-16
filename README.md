@@ -70,9 +70,9 @@ You will have to send the messages to queues named this way: `nb_scattr_queue_ad
 The format is json in all the adapters that are available in this repository. Pay attention to custom adapters as they may not be using JSON for their adapters.  
 If you want more information about the fields that an adapter awaits, please see its own README, which should be located in its directory.
 
-Libraries exists in the following languages (all adapters may not be supported, as they will only support JSON):
+Libraries exist in the following languages (all adapters may not be supported, as they will only support JSON):
 
-  - Node.js, [scattr-nodejs](https://github.com/needbook/scattr-nodejs)
+  - Node.js, [scattr-nodejs](https://github.com/needbook/scattr-nodejs).
 
 How to add my own adapter
 -------------------
