@@ -110,7 +110,7 @@ If you choose to install **Scattr** yourself, here are the dependencies:
   - CPPUnit (unit testing library)
   - [AMQP-CPP](https://github.com/needbook/AMQP-CPP)
   - [MacGPusher](https://github.com/needbook/MacGPusher)
-  - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
+  - [jsoncpp](https://github.com/needbook/jsoncpp)
 
 For the scripts located under `scripts`, which can be useful when developing on the project, you will need ruby with the following gems:
 
